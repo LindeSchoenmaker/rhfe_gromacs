@@ -1,0 +1,3 @@
+Files for setting up GROMACS run
+
+lig_topology for creating topology files based on sdf
