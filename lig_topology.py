@@ -34,7 +34,7 @@ def unique_atom_types(pmd_structure, name):
 
 
 if __name__ == "__main__":
-    ligands = Molecule.from_file('/zfsdata/data/linde/rhfe_runs/3d/comb.sdf')
+    ligands = Molecule.from_file('input/ligands/comb.sdf')
 
     # Load a forcefield
     lig_ff = ForceField('openff_unconstrained-2.0.0.offxml')
