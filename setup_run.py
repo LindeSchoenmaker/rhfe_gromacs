@@ -1,9 +1,17 @@
+import argparse
+
 import pmx
 
 from AZtutorial import AZtutorial
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-o", "--output", help="which files to produce",
+                type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production'])
+
 if __name__ == "__main__":
     print(pmx.__version__)
+
+    args = parser.parse_args()
     # initialize the free energy environment object: it will store the main parameters for the calculations
     fe = AZtutorial( )
 
@@ -22,9 +30,15 @@ if __name__ == "__main__":
     # finally, let's prepare the overall free energy calculation directory structure
     fe.prepareFreeEnergyDir( )
 
+    # set several parameters
+    fe.JOBqueue = 'SLURM'
+    fe.JOBsource = ['/etc/profile.d/modules.sh'] #,'/zfsdata/software/gromacs/2020.4/bin/GMXRC']
+    fe.JOBmodules = ['gromacs/2022.1/gcc.8.4.0-cuda.11.7.1'] #['shared',' gmx_mpi','cuda11']
+    fe.JOBexport = ['OMP_NUM_THREADS=8']
+    fe.JOBgpu = True
+    fe.JOBgmx = 'gmx mdrun'
 
-    prepare = False
-    if prepare:
+    if args.output == 'initial':
         # this command will map the atoms of all edges found in the 'fe' object
         # bVerbose flag prints the output of the command
         fe.atom_mapping(bVerbose=False)
@@ -35,15 +49,9 @@ if __name__ == "__main__":
         #build box, solvate
         fe.boxWaterIons( )
 
-    #prepare simulation
-    fe.prepare_simulation( simType='em' )
-
-    # set several parameters
-    fe.JOBqueue = 'SLURM'
-    fe.JOBsource = ['/etc/profile.d/modules.sh'] #,'/zfsdata/software/gromacs/2020.4/bin/GMXRC']
-    fe.JOBmodules = ['gromacs/2022.1/gcc.8.4.0-cuda.11.7.1'] #['shared',' gmx_mpi','cuda11']
-    fe.JOBexport = ['OMP_NUM_THREADS=8']
-    fe.JOBgpu = True
-    fe.JOBgmx = 'gmx mdrun'
-
-    fe.prepare_jobscripts(simType='em')
+        #prepare simulation
+        fe.prepare_simulation( simType='em' )
+        fe.prepare_jobscripts(simType='em')
+    else:
+        fe.prepare_simulation( simType=args.output )
+        fe.prepare_jobscripts(simType=args.output)
