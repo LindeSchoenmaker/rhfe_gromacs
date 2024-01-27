@@ -7,6 +7,8 @@ from AZtutorial import AZtutorial
 parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--output", help="which files to produce",
                 type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production'])
+parser.add_argument("-p", "--JOBpartition", help="which partition to use", default ='free',
+                type=str, choices=['free', 'free-gpu', 'standard', 'gpu'])
 
 if __name__ == "__main__":
     print(pmx.__version__)
@@ -37,6 +39,7 @@ if __name__ == "__main__":
     fe.JOBexport = ['OMP_NUM_THREADS=8']
     fe.JOBgpu = True
     fe.JOBgmx = 'gmx mdrun'
+    fe.JOBpartition = args.JOBpartition
 
     if args.output == 'initial':
         # this command will map the atoms of all edges found in the 'fe' object
