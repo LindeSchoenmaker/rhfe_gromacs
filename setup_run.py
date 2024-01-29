@@ -20,7 +20,7 @@ if __name__ == "__main__":
     fe = AZtutorial( )
 
     # set the workpath
-    fe.workPath = 'workpath_nosc'
+    fe.workPath = args.workPath
     # set the path to the molecular dynamics parameter files
     fe.mdpPath = 'input/mdppath/files'
     # set the number of replicas (several repetitions of calculation are useful to obtain reliable statistics)
