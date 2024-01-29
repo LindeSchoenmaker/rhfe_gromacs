@@ -11,6 +11,8 @@ parser.add_argument("-wp", "--workPath", help="the workpath",
                 type=str, default="workpath")
 parser.add_argument("-p", "--JOBpartition", help="which partition to use", default ='free',
                 type=str, choices=['free', 'free-gpu', 'standard', 'gpu'])
+parser.add_argument("-t", "--JOBsimtime", help="simulation time in hours", default =3,
+                type=int)
 
 if __name__ == "__main__":
     print(pmx.__version__)
@@ -42,6 +44,8 @@ if __name__ == "__main__":
     fe.JOBgpu = True
     fe.JOBgmx = 'gmx mdrun'
     fe.JOBpartition = args.JOBpartition
+
+    fe.JOBsimtime = args.JOBsimtime
 
     if args.output == 'initial':
         # this command will map the atoms of all edges found in the 'fe' object
