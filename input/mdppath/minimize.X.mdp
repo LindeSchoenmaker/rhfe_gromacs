@@ -5,23 +5,22 @@
 ;----------------------------------------------------
 ; RUN CONTROL & MINIMIZATION
 ;----------------------------------------------------
-define                 = -DLIGAND_XXX
+;define                 = -DFLEXIBLE -DLIGAND_XXX
 integrator             = steep
-nsteps                 = 50000
+nsteps                 = 5000
 emtol                  = 100
 emstep                 = 0.01
-comm-mode              = Linear
 nstcomm                = 100
 
 ;----------------------------------------------------
 ; OUTPUT CONTROL
 ;----------------------------------------------------
-nstxout                = 0          ; don't save coordinates to .trr
+nstxout                = 0        ; save coordinates to .trr every 250 steps
 nstvout                = 0          ; don't save velocities to .trr
 nstfout                = 0          ; don't save forces to .trr
 
-nstxout-compressed     = 500        ; xtc compressed trajectory output every 500 steps
-compressed-x-precision = 10000
+nstxout-compressed     = 0        ; xtc compressed trajectory output every 500 steps
+compressed-x-precision = 1000
 nstlog                 = 500        ; update log file every 500 steps
 nstenergy              = 500        ; save energies every 500 steps
 nstcalcenergy          = 100
@@ -29,12 +28,11 @@ nstcalcenergy          = 100
 ;----------------------------------------------------
 ; NEIGHBOR SEARCHING
 ;----------------------------------------------------
-cutoff-scheme          = verlet
+cutoff-scheme          = Verlet
+ns-type                = grid
 nstlist                = 10
 pbc                    = xyz
-rlist                  = 2
-verlet-buffer-tolerance = -1  ; override rlist and set manually instead
-
+rlist                  = 1.2
 
 ;----------------------------------------------------
 ; BONDS
@@ -45,9 +43,9 @@ constraints            = none
 ; ELECTROSTATICS
 ;----------------------------------------------------
 coulombtype            = PME
-rcoulomb               = 1.0
+rcoulomb               = 1.2
 rcoulomb-switch        = 0
-pme-order              = 6 
+pme-order              = 4 
 fourierspacing         = 0.10
 ewald-rtol             = 1e-6
 ewald_geometry         = 3d
@@ -73,11 +71,17 @@ gen_vel             = no
 ; FREE ENERGY CALCULATIONS
 ;----------------------------------------------------
 free-energy              = yes
-delta_lambda             = 0
-init_lambda_state        = YYY
+init_lambda_state        = 0
+couple-moltype           = UNK
+couple-lambda0           = vdw-q
+couple-lambda1           = none
 couple-intramol          = no
-nstdhdl                  = 5000
 separate-dhdl-file       = yes
+sc-alpha                 = 0.5
+sc-power                 = 1
+sc-sigma		 = 0.3
+; init_lambda_state        = 0    1   2    3   4    5   6   7   8   9  10  11   12  13   14  15   16  17   18  19
+coul-lambdas             = 0.0 0.25 0.5 0.75 1.0 1.00 1.0 1.0 1.0 1.0 1.0 1.0 1.00 1.0 1.00 1.0 1.00 1.0 1.00 1.0
+vdw-lambdas              = 0.0 0.00 0.0 0.00 0.0 0.05 0.1 0.2 0.3 0.4 0.5 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0
+nstdhdl                  = 100
 calc-lambda-neighbors    = -1
-vdw-lambdas              = 0.0 0.00 0.0 0.00 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.00 1.0 1.00 1.0
-coul-lambdas             = 0.0 0.25 0.5 0.75 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.25 0.5 0.75 1.0
