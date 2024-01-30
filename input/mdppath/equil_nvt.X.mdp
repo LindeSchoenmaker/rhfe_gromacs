@@ -39,8 +39,10 @@ continuation           = no         ; formerly known as 'unconstrained-start' - 
 ;----------------------------------------------------
 cutoff-scheme   = verlet
 nstlist         = 20     ; 20 fs (default is 10)
-rlist           = 1.2    ; short-range neighborlist cutoff (in nm)
+rlist           = 2    ; short-range neighborlist cutoff (in nm)
 pbc             = xyz    ; 3D PBC
+verlet-buffer-tolerance = -1  ; override rlist and set manually instead
+
 
 ;----------------------------------------------------
 ; ELECTROSTATICS
@@ -86,7 +88,7 @@ gen_temp     = 298.15
 free-energy              = yes
 delta_lambda             = 0
 init_lambda_state        = YYY
-couple-intramol          = yes
+couple-intramol          = no
 nstdhdl                  = 5000
 separate-dhdl-file       = yes
 calc-lambda-neighbors    = -1

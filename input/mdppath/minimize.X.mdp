@@ -32,7 +32,9 @@ nstcalcenergy          = 100
 cutoff-scheme          = verlet
 nstlist                = 10
 pbc                    = xyz
-rlist                  = 1.2
+rlist                  = 2
+verlet-buffer-tolerance = -1  ; override rlist and set manually instead
+
 
 ;----------------------------------------------------
 ; BONDS
@@ -73,7 +75,7 @@ gen_vel             = no
 free-energy              = yes
 delta_lambda             = 0
 init_lambda_state        = YYY
-couple-intramol          = yes
+couple-intramol          = no
 nstdhdl                  = 5000
 separate-dhdl-file       = yes
 calc-lambda-neighbors    = -1
