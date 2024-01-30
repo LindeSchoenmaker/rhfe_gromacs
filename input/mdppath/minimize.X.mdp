@@ -5,23 +5,22 @@
 ;----------------------------------------------------
 ; RUN CONTROL & MINIMIZATION
 ;----------------------------------------------------
-define                 = -DLIGAND_XXX
+;define                 = -DLIGAND_XXX
 integrator             = steep
-nsteps                 = 50000
+nsteps                 = 5000
 emtol                  = 100
 emstep                 = 0.01
-comm-mode              = Linear
 nstcomm                = 100
 
 ;----------------------------------------------------
 ; OUTPUT CONTROL
 ;----------------------------------------------------
-nstxout                = 0          ; don't save coordinates to .trr
+nstxout                = 0        ; save coordinates to .trr every 250 steps
 nstvout                = 0          ; don't save velocities to .trr
 nstfout                = 0          ; don't save forces to .trr
 
-nstxout-compressed     = 500        ; xtc compressed trajectory output every 500 steps
-compressed-x-precision = 10000
+nstxout-compressed     = 0        ; xtc compressed trajectory output every 500 steps
+compressed-x-precision = 1000
 nstlog                 = 500        ; update log file every 500 steps
 nstenergy              = 500        ; save energies every 500 steps
 nstcalcenergy          = 100
@@ -29,12 +28,11 @@ nstcalcenergy          = 100
 ;----------------------------------------------------
 ; NEIGHBOR SEARCHING
 ;----------------------------------------------------
-cutoff-scheme          = verlet
+cutoff-scheme          = Verlet
+ns-type                = grid
 nstlist                = 10
 pbc                    = xyz
-rlist                  = 2
-verlet-buffer-tolerance = -1  ; override rlist and set manually instead
-
+rlist                  = 1.2
 
 ;----------------------------------------------------
 ; BONDS
@@ -45,9 +43,9 @@ constraints            = none
 ; ELECTROSTATICS
 ;----------------------------------------------------
 coulombtype            = PME
-rcoulomb               = 1.0
+rcoulomb               = 1.2
 rcoulomb-switch        = 0
-pme-order              = 6 
+pme-order              = 4 
 fourierspacing         = 0.10
 ewald-rtol             = 1e-6
 ewald_geometry         = 3d
@@ -68,6 +66,7 @@ DispCorr                = EnerPres
 tcoupl              = no
 pcoupl              = no
 gen_vel             = no
+
 
 ;----------------------------------------------------
 ; FREE ENERGY CALCULATIONS
