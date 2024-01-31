@@ -549,7 +549,7 @@ class AZtutorial:
         elif simType=='equil_npt':
             inStr = '{0}/{1}/confout.gro'.format(prevpath, 'equil_nvt')
         elif simType=='production':
-            inStr = '{0}/{1}/confout.gro'.format(prevpath, 'equil_npt')
+            inStr = '{0}/{1}/confout.gro'.format(prevpath, 'equil_nvt')
             
         gmx.grompp(f=mdp, c=inStr, p=top, o=tpr, maxwarn=4, other_flags=' -po {0}'.format(mdout))
         self._clean_backup_files( simpath )

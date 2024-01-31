@@ -39,7 +39,6 @@ continuation           = yes         ; formerly known as 'unconstrained-start' -
 ; NEIGHBOR SEARCHING
 ;----------------------------------------------------
 cutoff-scheme   = verlet
-ns-type         = grid   ; search neighboring grid cells
 nstlist         = 20     ; 20 fs (default is 10)
 rlist           = 1.2    ; short-range neighborlist cutoff (in nm)
 pbc             = xyz    ; 3D PBC

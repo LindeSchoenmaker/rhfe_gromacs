@@ -30,7 +30,6 @@ nstcalcenergy          = 100
 ; NEIGHBOR SEARCHING
 ;----------------------------------------------------
 cutoff-scheme          = verlet
-ns-type                = grid
 nstlist                = 10
 pbc                    = xyz
 rlist                  = 1.2
