@@ -7,7 +7,7 @@
 ;----------------------------------------------------
 define                 = -DLIGAND_XXX
 integrator             = steep
-nsteps                 = 50000
+nsteps                 = 5000
 emtol                  = 100
 emstep                 = 0.01
 comm-mode              = Linear
@@ -30,6 +30,7 @@ nstcalcenergy          = 100
 ; NEIGHBOR SEARCHING
 ;----------------------------------------------------
 cutoff-scheme          = verlet
+ns-type                = grid
 nstlist                = 10
 pbc                    = xyz
 rlist                  = 1.2
@@ -37,15 +38,14 @@ rlist                  = 1.2
 ;----------------------------------------------------
 ; BONDS
 ;----------------------------------------------------
-constraints            = none
-
+constraints            = h-bonds
 ;----------------------------------------------------
 ; ELECTROSTATICS
 ;----------------------------------------------------
 coulombtype            = PME
-rcoulomb               = 1.0
+rcoulomb               = 1.2
 rcoulomb-switch        = 0
-pme-order              = 6 
+pme-order              = 4
 fourierspacing         = 0.10
 ewald-rtol             = 1e-6
 ewald_geometry         = 3d
