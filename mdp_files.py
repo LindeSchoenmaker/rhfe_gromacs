@@ -1,5 +1,8 @@
+import glob
+import os
+
 if __name__ == "__main__":
-    protocols = ['equil_npt', 'equil_nvt', 'minimize', 'prod']
+    protocols = [os.path.basename(x).split('.')[0] for x in glob.glob('input/mdppath/*.X.mdp')]
     softcore = False
 
     for protocol in protocols:
