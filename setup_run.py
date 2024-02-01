@@ -9,7 +9,7 @@ parser.add_argument("-o", "--output", help="which files to produce",
                 type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production'])
 parser.add_argument("-wp", "--workPath", help="the workpath",
                 type=str, default="workpath")
-parser.add_argument("-p", "--JOBpartition", help="which partition to use", default ='free',
+parser.add_argument("-p", "--JOBpartition", help="which partition to use", default ='free-gpu',
                 type=str, choices=['free', 'free-gpu', 'standard', 'gpu'])
 parser.add_argument("-t", "--JOBsimtime", help="simulation time in hours", default =3,
                 type=int)

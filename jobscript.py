@@ -149,11 +149,12 @@ class Jobscript:
 
         self.header = '''#!/bin/bash
 #SBATCH --job-name={jobname}
-#SBATCH -A DMOBLEY_LAB
-#SBATCH --error=rinstancestagetemp.e
+#SBATCH -A DMOBLEY_LAB_GPU
+#SBATCH --error=s1r1s1_%A_%a.e
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node={simcpu}
 #SBATCH --cpus-per-task=1
+#SBATCH --gpus=1
 #SBATCH --mem-per-cpu=2gb
 #SBATCH --time={simtime}:00:00
 {partition}
