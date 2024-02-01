@@ -146,7 +146,7 @@ class Jobscript:
         partition = ''
         if partitionline!=None and partitionline!='':
             partition = "#SBATCH --partition={0}\n".format(partitionline)
-            if partition in ['gpu', 'free-gpu']:
+            if partitionline in ['gpu', 'free-gpu']:
                 gpu = "#SBATCH --gpus=1\n".format()
             else:
                 gpu = ''
