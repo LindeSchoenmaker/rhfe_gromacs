@@ -589,7 +589,7 @@ class AZtutorial:
                         self._prepare_single_tpr( simpath, toppath, state, simType, prevpath )
                     
                     # ligand in vacuum
-                    if bVac==True:
+                    if bVac==True and simType != 'equil_npt':
                         wp = 'vacuum'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
                         prevpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r)
@@ -704,7 +704,7 @@ class AZtutorial:
                         counter+=1
                     
                     # ligand in vac
-                    if bVac==True:
+                    if bVac==True and simType != 'equil_npt':
                         wp = 'vacuum'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
                         jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
