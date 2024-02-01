@@ -145,7 +145,7 @@ class Jobscript:
         # optionally, can create a partition entry
         partition = ''
         if partitionline!=None and partitionline!='':
-            partition = "#SBATCH --partition={0}\n".format(partitionline)
+            partition = "#SBATCH --partition={0}\n#SBATCH --gpus=1\n".format(partitionline)
 
         self.header = '''#!/bin/bash
 #SBATCH --job-name={jobname}
@@ -154,7 +154,6 @@ class Jobscript:
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node={simcpu}
 #SBATCH --cpus-per-task=1
-#SBATCH --gpus=1
 #SBATCH --mem-per-cpu=2gb
 #SBATCH --time={simtime}:00:00
 {partition}
