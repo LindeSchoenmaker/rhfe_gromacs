@@ -539,7 +539,13 @@ class AZtutorial:
         tpr = '{0}/tpr.tpr'.format(simpath)
         mdout = '{0}/mdout.mdp'.format(simpath)
         # mdp
-        mdp = '{0}/{1}.{2}.mdp'.format(self.mdpPath,mdpPrefix, state)
+        if simType=='em' or simType=='equil_npt':
+            mdp = '{0}/{1}.{2}.mdp'.format(self.mdpPath,mdpPrefix, state)
+        elif simType=='equil_nvt' or simType=='production':
+            if 'water' in simpath:
+                mdp = '{0}/{1}_wat.{2}.mdp'.format(self.mdpPath,mdpPrefix, state)
+            else:
+                mdp = '{0}/{1}_vac.{2}.mdp'.format(self.mdpPath,mdpPrefix, state)
 
         # str
         if simType=='em':
@@ -549,7 +555,10 @@ class AZtutorial:
         elif simType=='equil_npt':
             inStr = '{0}/{1}/confout.gro'.format(prevpath, 'equil_nvt')
         elif simType=='production':
-            inStr = '{0}/{1}/confout.gro'.format(prevpath, 'equil_nvt')
+            if 'water' in simpath:
+                inStr = '{0}/{1}/confout.gro'.format(prevpath, 'equil_npt')
+            else:
+                inStr = '{0}/{1}/confout.gro'.format(prevpath, 'equil_nvt')
             
         gmx.grompp(f=mdp, c=inStr, p=top, o=tpr, maxwarn=4, other_flags=' -po {0}'.format(mdout))
         self._clean_backup_files( simpath )
