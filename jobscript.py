@@ -145,10 +145,11 @@ class Jobscript:
         # optionally, can create a partition entry
         partition = ''
         if partitionline!=None and partitionline!='':
+            partition = "#SBATCH --partition={0}\n".format(partitionline)
             if partition in ['gpu', 'free-gpu']:
-                partition = "#SBATCH --partition={0}\n#SBATCH --gpus=1\n".format(partitionline)
+                gpu = "#SBATCH --gpus=1\n".format()
             else:
-                partition = "#SBATCH --partition={0}\n".format(partitionline)
+                gpu = ''
 
         self.header = '''#!/bin/bash
 #SBATCH --job-name={jobname}
@@ -160,6 +161,7 @@ class Jobscript:
 #SBATCH --mem-per-cpu=2gb
 #SBATCH --time={simtime}:00:00
 {partition}
+{gpu}
 
 {source}
 {modules}
@@ -167,7 +169,7 @@ class Jobscript:
 
 {gmx}
 '''.format(jobname=self.jobname,simcpu=self.simcpu,simtime=self.simtime,partition=partition,
-           source=sourceline,modules=moduleline,export=exportline,
+           gpu=gpu,source=sourceline,modules=moduleline,export=exportline,
            gmx=gmxline)
 
     def _submission_script( self, jobfolder, counter, simType='eq', frNum=80, bArray=True ):
