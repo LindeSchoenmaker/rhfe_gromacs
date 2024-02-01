@@ -28,7 +28,7 @@ nstcalcenergy          = 100        ; calculate energies every 100 steps
 ; BONDS
 ;----------------------------------------------------
 constraint_algorithm   = lincs      ; holonomic constraints
-constraints            = none  ; hydrogens only are constrained
+constraints            = h-bonds ; hydrogens only are constrained
 lincs_iter             = 1          ; accuracy of LINCS (1 is default)
 lincs_order            = 12          ; also related to accuracy (4 is default)
 lincs-warnangle        = 30         ; maximum angle that a bond can rotate before LINCS will complain (30 is default)
@@ -65,16 +65,13 @@ DispCorr                = EnerPres
 ;----------------------------------------------------
 ; TEMPERATURE & PRESSURE COUPL
 ;----------------------------------------------------
-tcoupl           = no
 tc_grps          = system
-tau_t            = 1.0
+tau_t            = 2.0
 ref_t            = 298.15
-pcoupl           = Parrinello-Rahman
-pcoupltype       = isotropic            ; uniform scaling of box vectors
-tau_p            = 1.0                    ; time constant (ps)
-ref_p            = 1.01325                  ; reference pressure (bar)
-compressibility  = 4.5e-05              ; isothermal compressibility of water (bar^-1)
-refcoord_scaling = com
+pcoupl           = no
+tau_p            = 0.5
+compressibility  = 4.5e-05
+ref_p            = 1.0
 
 ;----------------------------------------------------
 ; VELOCITY GENERATION
