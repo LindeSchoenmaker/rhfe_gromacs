@@ -145,7 +145,10 @@ class Jobscript:
         # optionally, can create a partition entry
         partition = ''
         if partitionline!=None and partitionline!='':
-            partition = "#SBATCH --partition={0}\n#SBATCH --gpus=1\n".format(partitionline)
+            if partition in ['gpu', 'free-gpu']:
+                partition = "#SBATCH --partition={0}\n#SBATCH --gpus=1\n".format(partitionline)
+            else:
+                partition = "#SBATCH --partition={0}\n".format(partitionline)
 
         self.header = '''#!/bin/bash
 #SBATCH --job-name={jobname}
