@@ -54,7 +54,7 @@ fourierspacing   = 0.10     ; grid spacing for FFT
 ewald-rtol       = 1e-6     ; relative strength of the Ewald-shifted direct potential at rcoulomb
 epsilon_surface  = 0
 
-----------------------------------------------------
+;----------------------------------------------------
 ; VDW
 ;----------------------------------------------------
 vdw-type                = Cut-off
