@@ -491,8 +491,8 @@ class AZtutorial:
                 outStr = '{0}/final.pdb'.format(outVacPath)
                 gmx.editconf(inStr, o=outStr, bt=self.boxshape, d=self.boxd, other_flags='') 
             
-            # prepare files for vacuum energy minimization
-            mdp = '{0}/minimize.0.mdp'.format(self.mdpPath)     
+            # prepare files for energy minimization
+            mdp = '{0}/minimize_vac.0.mdp'.format(self.mdpPath)     
             inStr = '{0}/final.pdb'.format(outVacPath)
             top = '{0}/topol.top'.format(outVacPath)
             tpr = '{0}/tpr.tpr'.format(outVacPath)
@@ -500,11 +500,28 @@ class AZtutorial:
             gmx.grompp(f=mdp, c=inStr, p=top, o=tpr, maxwarn=4, other_flags=' -po {0}'.format(mdout))                  
                 
             # water ligand
-            if bWatLig==True:            
+            if bWatLig==True:    
+                # prepare files for energy minimization
+                mdp = '{0}/minimize_wat.0.mdp'.format(self.mdpPath)     
+                inStr = '{0}/final.pdb'.format(outVacPath)
+                top = '{0}/topol.top'.format(outVacPath)
+                tpr = '{0}/tpr.tpr'.format(outVacPath)
+                mdout = '{0}/mdout.mdp'.format(outVacPath)
+                gmx.grompp(f=mdp, c=inStr, p=top, o=tpr, maxwarn=4, other_flags=' -po {0}'.format(mdout))
+
                 inStr = '{0}/box.pdb'.format(outWatPath)
                 outStr = '{0}/final.pdb'.format(outWatPath)
                 top = '{0}/topol.top'.format(outWatPath)
                 gmx.solvate(inStr, cs='spc216.gro', p=top, o=outStr)
+            
+            else:
+                # prepare files for energy minimization
+                mdp = '{0}/minimize_vac.0.mdp'.format(self.mdpPath)     
+                inStr = '{0}/final.pdb'.format(outVacPath)
+                top = '{0}/topol.top'.format(outVacPath)
+                tpr = '{0}/tpr.tpr'.format(outVacPath)
+                mdout = '{0}/mdout.mdp'.format(outVacPath)
+                gmx.grompp(f=mdp, c=inStr, p=top, o=tpr, maxwarn=4, other_flags=' -po {0}'.format(mdout))
            
             # # ions ligand
             # if bIonLig:
@@ -539,9 +556,9 @@ class AZtutorial:
         tpr = '{0}/tpr.tpr'.format(simpath)
         mdout = '{0}/mdout.mdp'.format(simpath)
         # mdp
-        if simType=='em' or simType=='equil_npt':
+        if simType=='equil_npt':
             mdp = '{0}/{1}.{2}.mdp'.format(self.mdpPath,mdpPrefix, state)
-        elif simType=='equil_nvt' or simType=='production':
+        elif simType in ['em', 'equil_nvt', 'production']:
             if 'water' in simpath:
                 mdp = '{0}/{1}_wat.{2}.mdp'.format(self.mdpPath,mdpPrefix, state)
             else:

@@ -39,20 +39,20 @@ continuation           = yes        ; formerly known as 'unconstrained-start' - 
 ;----------------------------------------------------
 cutoff-scheme   = verlet
 nstlist         = 20     ; 20 fs (default is 10)
-rlist           = 1.2    ; short-range neighborlist cutoff (in nm)
+rlist           = 2    ; short-range neighborlist cutoff (in nm)
 pbc             = xyz    ; 3D PBC
 
 ;----------------------------------------------------
 ; ELECTROSTATICS
 ;----------------------------------------------------
-coulombtype      = PME      ; Particle Mesh Ewald for long-range electrostatics
-rcoulomb         = 1.2      ; short-range electrostatic cutoff (in nm)
-rcoulomb-switch  = 0
-ewald_geometry   = 3d       ; Ewald sum is performed in all three dimensions
-pme-order        = 4        ; interpolation order for PME (default is 4)
-fourierspacing   = 0.10     ; grid spacing for FFT
-ewald-rtol       = 1e-6     ; relative strength of the Ewald-shifted direct potential at rcoulomb
-epsilon_surface  = 0
+coulombtype            = Cut-off
+rcoulomb               = 2
+rcoulomb-switch        = 0
+pme-order              = 4 
+fourierspacing         = 0.10
+ewald-rtol             = 1e-6
+ewald_geometry         = 3d
+epsilon_surface        = 0
 
 ;----------------------------------------------------
 ; VDW
@@ -88,5 +88,8 @@ couple-intramol          = no
 nstdhdl                  = 5000
 separate-dhdl-file       = yes
 calc-lambda-neighbors    = -1
+sc-alpha                 = 0.5
+sc-power                 = 1
+sc-sigma		         = 0.3
 vdw-lambdas              = 0.0 0.00 0.0 0.00 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.00 1.0 1.00 1.0
 coul-lambdas             = 0.0 0.25 0.5 0.75 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.25 0.5 0.75 1.0
