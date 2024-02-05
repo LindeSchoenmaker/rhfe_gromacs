@@ -57,8 +57,8 @@ epsilon_surface        = 0
 ; VDW
 ;----------------------------------------------------
 vdwtype                = Cut-off
-rvdw                   = 1.0
-rvdw-switch            = 0.9
+rvdw                   = 2
+rvdw-switch            = 1.8
 vdw-modifier           = Potential-switch
 ewald-rtol-lj          = 1e-3
 DispCorr               = EnerPres

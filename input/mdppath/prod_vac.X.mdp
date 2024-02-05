@@ -57,11 +57,11 @@ epsilon_surface        = 0
 ;----------------------------------------------------
 ; VDW
 ;----------------------------------------------------
-vdwtype                 = Cut-off
-rvdw                    = 1.0
-rvdw-switch             = 0.9
-vdw-modifier            = Potential-switch
-DispCorr                = EnerPres
+vdwtype                = Cut-off
+rvdw                   = 2
+rvdw-switch            = 1.8
+vdw-modifier           = Potential-switch
+DispCorr               = EnerPres
 ;----------------------------------------------------
 ; TEMPERATURE & PRESSURE COUPL
 ;----------------------------------------------------
