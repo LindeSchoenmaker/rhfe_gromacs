@@ -53,7 +53,7 @@ class AZtutorial:
         # simulation setup
         self.ff = 'amber99sb-star-ildn-mut.ff'
         self.boxshape = 'dodecahedron'
-        self.boxd = 1.5
+        self.boxd = 2
         self.water = 'tip3p'
         self.conc = 0.15
         self.pname = 'NaJ'
