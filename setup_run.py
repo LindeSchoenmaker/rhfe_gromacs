@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # provide the path to the folder with ligand structures and topologies
     fe.ligandPath = 'input/ligands'
     # provide edges
-    fe.edges = [ ['to_', 'int'] ] #, ['int','ref'], ['to_', 'ref'] ]
+    fe.edges = [ ['int','ref'], ['to_', 'ref'] ] #, ['to_', 'int'], ['int','ref'], ['to_', 'ref'] ]
     # finally, let's prepare the overall free energy calculation directory structure
     fe.prepareFreeEnergyDir( )
 
