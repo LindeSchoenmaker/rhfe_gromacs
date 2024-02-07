@@ -13,6 +13,8 @@ parser.add_argument("-p", "--JOBpartition", help="which partition to use", defau
                 type=str, choices=['free', 'free-gpu', 'standard', 'gpu'])
 parser.add_argument("-t", "--JOBsimtime", help="simulation time in hours", default =3,
                 type=int)
+parser.add_argument("-e", "--edges", help="simulation time in hours", default = ['to_', 'ref'],
+                type=list)
 
 if __name__ == "__main__":
     print(pmx.__version__)
@@ -32,7 +34,7 @@ if __name__ == "__main__":
     # provide the path to the folder with ligand structures and topologies
     fe.ligandPath = 'input/ligands'
     # provide edges
-    fe.edges = [ ['int','ref'], ['to_', 'ref'] ] #, ['to_', 'int'], ['int','ref'], ['to_', 'ref'] ]
+    fe.edges = [args.edges] #, ['to_', 'int'], ['int','ref'], ['to_', 'ref'] ]
     # finally, let's prepare the overall free energy calculation directory structure
     fe.prepareFreeEnergyDir( )
 
