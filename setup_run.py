@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # provide edges
     if len(args.ligands) == 1:
         print('need at least two ligands')
-    edges = [list(x) for x in itertools.combinations(args.lig, 2)]
+    edges = [list(x) for x in itertools.combinations(args.ligands, 2)]
     fe.edges = edges #, ['to_', 'int'], ['int','ref'], ['to_', 'ref'] ]
     # finally, let's prepare the overall free energy calculation directory structure
     fe.prepareFreeEnergyDir( )
