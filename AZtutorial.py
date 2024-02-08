@@ -366,8 +366,6 @@ class AZtutorial:
 
             os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_tmp.itp'.format(outpath))
             process_file('{0}/merged_tmp.itp'.format(outpath), '{0}/merged.itp'.format(outpath))
-            os.rename('{0}/ffmerged.itp'.format(outpath), '{0}/ffmerged_tmp.itp'.format(outpath))
-            process_file('{0}/ffmerged_tmp.itp'.format(outpath), '{0}/ffmerged.itp'.format(outpath))
 
         print('DONE')
             
@@ -418,7 +416,9 @@ class AZtutorial:
             ffitpIn1 = '{0}/ffMOL.itp'.format(lig1path)
             ffitpIn2 = '{0}/ffMOL.itp'.format(lig2path)
             ffitpIn3 = '{0}/ffmerged.itp'.format(hybridStrTopPath)
-            ligand_alchemy._merge_FF_files( ffitpOut, ffsIn=[ffitpIn1,ffitpIn2,ffitpIn3] )        
+            ligand_alchemy._merge_FF_files( ffitpOut, ffsIn=[ffitpIn1,ffitpIn2,ffitpIn3] )     
+            os.rename('{0}/ffmerged.itp'.format(hybridStrTopPath), '{0}/ffmerged_tmp.itp'.format(hybridStrTopPath))
+            process_file('{0}/ffmerged_tmp.itp'.format(hybridStrTopPath), '{0}/ffmerged.itp'.format(hybridStrTopPath))   
             # top
             ligTopFname = '{0}/topol.top'.format(outWatPath)
             ligFFitp = '{0}/ffmerged.itp'.format(hybridStrTopPath)
