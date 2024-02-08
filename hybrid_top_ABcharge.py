@@ -29,7 +29,7 @@ def process_atoms(line, in_f, out_file):
             pass
         else:
             nr, typ, resnr, res, atom, cgnr, charge, mass, typB, chargeB, massB = line.strip().split()
-            atoms_lig_A.append(nr.rjust(6) + typ.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + charge.rjust(11) + mass.rjust(11) + " " + typ.rjust(11) + '0.000000'.rjust(11) + mass.rjust(11))
+            atoms_lig_A.append(nr.rjust(6) + typ.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + charge.rjust(11) + mass.rjust(11) + " " + (typ+'B').rjust(11) + '0.000000'.rjust(11) + mass.rjust(11))
             atoms_lig_B.append(nr.rjust(6) + typB.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + '0.000000'.rjust(11) + massB.rjust(11) + " " + typB.rjust(11) + chargeB.rjust(11) + massB.rjust(11))
             atoms_lig_AB.append(nr.rjust(6) + typ.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + '0.000000'.rjust(11) + mass.rjust(11) + " " + typB.rjust(11) + '0.000000'.rjust(11) + massB.rjust(11))
     out_file.write(";    nr           type resnr residue atom  cgnr     charge    mass          typeB    chargeB   massB\n")
@@ -204,6 +204,22 @@ def process_cmap(line, in_f, out_file):
             out_file.write(line)
     return
 
+def process_atomtype(line, in_f, out_file):
+    out_file.write(line + "\n")
+    while True:
+        line = in_f.readline()
+        if line.strip() == "":
+            out_file.write("\n")
+            break
+        elif line.split()[0] == ";":
+            out_file.write(line)
+        else:
+            out_file.write(line)
+            name,  mass, charge, ptype, V, W = line.strip().split()
+            line = (name + 'B').rjust(11) + mass.rjust(16) + charge.rjust(16) + ptype.rjust(7) + V.rjust(16) + "0.00000000".rjust(16) + "\n"
+            out_file.write(line)
+    return
+
 def process_file(in_file, out_file):
     with open(out_file, 'w') as out_f:
         with open(in_file) as in_f:
@@ -236,8 +252,15 @@ def process_file(in_file, out_file):
                     print("cmap section started!")
                     process_cmap(line.strip(), in_f, out_f)
                     print("cmap section done!")
+                elif line.strip() == "[ atomtypes ]":
+                    print("atomtype section started!")
+                    process_atomtype(line.strip(), in_f, out_f)
+                    print("atomtype section done!")
                 elif line.strip() == "":
                     out_f.write(line)
         in_f.close()
     out_f.close()
 
+
+if __name__ == "__main__":
+    process_file('workpath/edge_to__int/hybridStrTop/ffmerged.itp', 'test')
