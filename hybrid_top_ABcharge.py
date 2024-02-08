@@ -17,7 +17,6 @@ def process_moleculetypes(line, in_f, out_file):
 
 def process_atoms(line, in_f, out_file):
     out_file.write(line)
-    atoms_lig_A = []
     atoms_lig_B = []
     atoms_lig_AB = []
     while True:
@@ -29,23 +28,19 @@ def process_atoms(line, in_f, out_file):
             pass
         else:
             nr, typ, resnr, res, atom, cgnr, charge, mass, typB, chargeB, massB = line.strip().split()
-            atoms_lig_A.append(nr.rjust(6) + typ.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + charge.rjust(11) + mass.rjust(11) + " " + typ.rjust(11) + '0.000000'.rjust(11) + mass.rjust(11))
+            atoms_lig_AB.append(nr.rjust(6) + typ.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + charge.rjust(11) + mass.rjust(11) + " " + typB.rjust(11) + '0.000000'.rjust(11) + massB.rjust(11))
             atoms_lig_B.append(nr.rjust(6) + typB.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + '0.000000'.rjust(11) + massB.rjust(11) + " " + typB.rjust(11) + chargeB.rjust(11) + massB.rjust(11))
-            atoms_lig_AB.append(nr.rjust(6) + typ.rjust(12) + resnr.rjust(7) + res.rjust(7) + atom.rjust(7) + cgnr.rjust(7) + '0.000000'.rjust(11) + mass.rjust(11) + " " + typB.rjust(11) + '0.000000'.rjust(11) + massB.rjust(11))
     out_file.write(";    nr           type resnr residue atom  cgnr     charge    mass          typeB    chargeB   massB\n")
 
-    out_file.write("#ifdef LIGAND_A\n")
-    for line in atoms_lig_A:
-        out_file.write(line + "\n")
-    out_file.write("#endif\n")
-    out_file.write("#ifdef LIGAND_B\n")
-    for line in atoms_lig_B:
-        out_file.write(line + "\n")
-    out_file.write("#endif\n")
     out_file.write("#ifdef LIGAND_AB\n")
     for line in atoms_lig_AB:
         out_file.write(line + "\n")
     out_file.write("#endif\n\n")
+    out_file.write("#ifdef LIGAND_B\n")
+    for line in atoms_lig_B:
+        out_file.write(line + "\n")
+    out_file.write("#endif\n")
+    
     return
 
 def process_bonds(line, in_f, out_file):
@@ -65,10 +60,9 @@ def process_bonds(line, in_f, out_file):
                 last_bonds_section.append(line.strip())
 
     if len(last_bonds_section) != 0:
-        out_file.write("#ifdef LIGAND_A\n")
+        out_file.write("#ifdef LIGAND_AB\n")
         for line in last_bonds_section:
-            ai, aj, funct, c1, k1, c2, k2 = line.strip().split()[:7]
-            out_file.write("    " + ai + "    " + aj + "\t" + funct + "\t" +  c1 + "\t" + k1 + "\t" + c1 + "\t" + k1 + "\n")
+            out_file.write("    " + line + "\n")
         out_file.write("#endif\n")
 
         out_file.write("#ifdef LIGAND_B\n")
@@ -77,10 +71,6 @@ def process_bonds(line, in_f, out_file):
             out_file.write("    " + ai + "    " + aj + "\t" + funct + "\t" +  c2 + "\t" + k2 + "\t" + c2 + "\t" + k2 + "\n")
         out_file.write("#endif\n")
         
-        out_file.write("#ifdef LIGAND_AB\n")
-        for line in last_bonds_section:
-            out_file.write("    " + line + "\n")
-        out_file.write("#endif\n")
     out_file.write("\n\n")
     return
 
@@ -104,10 +94,9 @@ def process_pairs(line, in_f, out_file):
             else:
                 out_file.write(line)
     if len(last_pairs_section) != 0:
-        out_file.write("#ifdef LIGAND_A\n")
+        out_file.write("#ifdef LIGAND_AB\n")
         for line in last_pairs_section:
-            ai, aj, funct, c0, c1, c2, c3 = line.strip().split()[:7]
-            out_file.write("    " + ai + "    " + aj + "\t" + funct + "\t" + c0 + "  " + c1 + "\t" + c0 + "  " + c1 + "\n")
+            out_file.write("    " + line + "\n")
         out_file.write("#endif\n")
         
         out_file.write("#ifdef LIGAND_B\n")
@@ -116,10 +105,7 @@ def process_pairs(line, in_f, out_file):
             out_file.write("    " + ai + "    " + aj + "\t" + funct + "\t" + c2 + "  " + c3 + "\t" + c2 + "  " + c3 + "\n")
         out_file.write("#endif\n")
 
-        out_file.write("#ifdef LIGAND_AB\n")
-        for line in last_pairs_section:
-            out_file.write("    " + line + "\n")
-        out_file.write("#endif\n")
+        
     out_file.write("\n\n")
 
     return
@@ -140,10 +126,9 @@ def process_angles(line, in_f, out_file):
             else:
                 last_angless_section.append(line.strip())
     if len(last_angless_section) != 0:
-        out_file.write("#ifdef LIGAND_A\n")
+        out_file.write("#ifdef LIGAND_AB\n")
         for line in last_angless_section:
-            ai, aj, ak, funct, c1, k1, c2, k2 = line.strip().split()[:8]
-            out_file.write("    " + ai + "    " + aj + "    " + ak + "    " + funct + "\t" + c1 + "\t" + k1 + "\t" + c1 + "\t" + k1 + "\n")
+            out_file.write("    " + line + "\n")
         out_file.write("#endif\n")
 
         out_file.write("#ifdef LIGAND_B\n")
@@ -152,16 +137,12 @@ def process_angles(line, in_f, out_file):
             out_file.write("    " + ai + "    " + aj + "    " + ak + "    " + funct + "\t" +  c2 + "\t" + k2 + "\t" + c2 + "\t" + k2 + "\n")
         out_file.write("#endif\n")
 
-        out_file.write("#ifdef LIGAND_AB\n")
-        for line in last_angless_section:
-            out_file.write("    " + line + "\n")
-        out_file.write("#endif\n")
+        
     out_file.write("\n\n")
     return
 
 def process_dhedrals(line, in_f, out_file):
     out_file.write(line + "\n")
-    dihedrals_lig_A = []
     dihedrals_lig_B = []
     dihedrals_lig_AB = []
     while True:
@@ -174,21 +155,16 @@ def process_dhedrals(line, in_f, out_file):
         else:
             ai, aj, ak, al, funct, a1, fc1, f1, a2, fc2, f2 = line.strip().split()[0:11]
             comment = " ".join(line.split()[11:])
-            dihedrals_lig_A.append(ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + fc1 + " " + f1 + " " + a1 + " " + fc1 + " " + f1 + " " + comment)
             dihedrals_lig_B.append(ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a2 + " " + fc2 + " " + f2 + " " + a2 + " " + fc2 + " " + f2 + " " + comment)
             dihedrals_lig_AB.append(line.strip())
-    out_file.write("#ifdef LIGAND_A\n")
-    for line in dihedrals_lig_A:
-        out_file.write(line + "\n")
-    out_file.write("#endif\n")
-    out_file.write("#ifdef LIGAND_B\n")
-    for line in dihedrals_lig_B:
-        out_file.write(line + "\n")
-    out_file.write("#endif\n")
     out_file.write("#ifdef LIGAND_AB\n")
     for line in dihedrals_lig_AB:
         out_file.write(line + "\n")
     out_file.write("#endif\n\n")
+    out_file.write("#ifdef LIGAND_B\n")
+    for line in dihedrals_lig_B:
+        out_file.write(line + "\n")
+    out_file.write("#endif\n")
     return
 
 def process_cmap(line, in_f, out_file):
