@@ -47,7 +47,7 @@ class AZtutorial:
         # parameters for the general setup
         self.replicas = 3        
         self.simTypes = ['em','equil_nvt', 'equil_npt','production']
-        self.states = list(range(19))
+        self.states = list(range(20))
         self.thermCycleBranches = ['water','vacuum']
                 
         # simulation setup
@@ -412,7 +412,7 @@ class AZtutorial:
             
             # Ligand topology water
             # ffitp
-            ffitpOut = '{0}/ffmerged.itp'.format(hybridStrTopPath)
+            ffitpOut = '{0}/ffmerged_new.itp'.format(hybridStrTopPath)
             ffitpIn1 = '{0}/ffMOL.itp'.format(lig1path)
             ffitpIn2 = '{0}/ffMOL.itp'.format(lig2path)
             ffitpIn3 = '{0}/ffmerged.itp'.format(hybridStrTopPath)
