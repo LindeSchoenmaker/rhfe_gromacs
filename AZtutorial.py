@@ -366,8 +366,6 @@ class AZtutorial:
 
             os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_tmp.itp'.format(outpath))
             process_file('{0}/merged_tmp.itp'.format(outpath), '{0}/merged.itp'.format(outpath))
-            os.rename('{0}/ffmerged.itp'.format(outpath), '{0}/ffmerged_tmp.itp'.format(outpath))
-            process_file('{0}/ffmerged_tmp.itp'.format(outpath), '{0}/ffmerged.itp'.format(outpath))
 
         print('DONE')
             
