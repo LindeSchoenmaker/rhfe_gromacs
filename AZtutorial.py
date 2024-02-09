@@ -364,8 +364,9 @@ class AZtutorial:
             print('Creating hybrid structure/topology')
             print('----------------------------------')
 
-            os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_tmp.itp'.format(outpath))
-            process_file('{0}/merged_tmp.itp'.format(outpath), '{0}/merged.itp'.format(outpath))
+            for edge in edges:
+                os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_tmp.itp'.format(outpath))
+                process_file('{0}/merged_tmp.itp'.format(outpath), '{0}/merged.itp'.format(outpath))
 
         print('DONE')
             
