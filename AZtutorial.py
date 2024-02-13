@@ -365,6 +365,7 @@ class AZtutorial:
             print('----------------------------------')
 
             for edge in edges:
+                outpath = self._get_specific_path(edge=edge,bHybridStrTop=True)
                 os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_tmp.itp'.format(outpath))
                 process_file('{0}/merged_tmp.itp'.format(outpath), '{0}/merged.itp'.format(outpath))
 
