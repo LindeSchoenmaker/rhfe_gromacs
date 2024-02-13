@@ -16,6 +16,8 @@ parser.add_argument("-t", "--JOBsimtime", help="simulation time in hours", defau
                 type=int)
 parser.add_argument("-l", "--ligands", help="provide ligands for which to enumerate edges, at least 2", default = ['to_', 'ref'],
                 nargs='+', type=str)
+parser.add_argument("-n", "--num_replicas", help="Number of replicas", default = 1,
+                type=int)
 
 if __name__ == "__main__":
     print(pmx.__version__)
@@ -29,7 +31,7 @@ if __name__ == "__main__":
     # set the path to the molecular dynamics parameter files
     fe.mdpPath = 'input/mdppath/files'
     # set the number of replicas (several repetitions of calculation are useful to obtain reliable statistics)
-    fe.replicas = 1
+    fe.replicas = args.num_replicas
     # provide the path to the protein structure and topology
     fe.proteinPath = 'None'
     # provide the path to the folder with ligand structures and topologies

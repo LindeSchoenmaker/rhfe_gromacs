@@ -8,7 +8,7 @@
 define       = -DLIGAND_XXX
 integrator   = sd            ; stochastic leap-frog integrator
 tinit        = 0
-nsteps       = 2500000      ; 2.5 M steps - 5ns
+nsteps       = 3750000      ; 3.75 M steps - 7.5ns
 dt           = 0.002         ; 2 fs
 comm-mode    = None
 
