@@ -299,7 +299,6 @@ class AZtutorial:
                                 '-i2',i2,
                                 '-o1',o1,
                                 '-o2',o2,
-                                '-'
                                 '-opdb1',opdb1,
                                 '-opdb2',opdb2,                                        
                                 '-opdbm1',opdbm1,
