@@ -305,7 +305,7 @@ class AZtutorial:
                                 '-opdbm2',opdbm2,
                                 '-score',score,
                                 '-log',log,
-                                '-H2Hpolar','True'],
+                                '--H2Hpolar','True'],
                                 stdout=subprocess.PIPE, 
                                 stderr=subprocess.PIPE)
 
