@@ -39,7 +39,6 @@ def process_angles(line, in_f, out_file, endstate='B', fc='20.92', bridge_atoms 
 def process_dhedrals(line, in_f, out_file, endstate = 'B', P2s = ['H8']):
     "remove dihedral angles P3P2P1D1, only keep selected dihedrals of P2P1D1D2"
     out_file.write(line + "\n")
-    i = 0
     while True:
         line = in_f.readline()
         if line.strip() == "":
@@ -53,12 +52,18 @@ def process_dhedrals(line, in_f, out_file, endstate = 'B', P2s = ['H8']):
             if endstate == "A":
                 first = line.split()[-1].split('->')[0]
                 if first.count("A") > 1 and "D" in first:
-                    if not any(ext in comment for ext in P2s):
+                    if any(ext in comment for ext in P2s):
+                        if first.count("A") !=2:
+                            line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + "0" + " " + f1 + " " + a2 + " " + fc2 + " " + f2 + " " + comment + "\n"
+                    else:    
                         line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + "0" + " " + f1 + " " + a2 + " " + fc2 + " " + f2 + " " + comment + "\n"
             elif endstate == 'B':
                 second = line.split()[-1].split('->')[1]
                 if second.count("A") > 1 and "D" in second:
-                    if not any(ext in comment for ext in P2s):
+                    if any(ext in comment for ext in P2s):
+                        if second.count("A") != 2:
+                            line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + fc1 + " " + f1 + " " + a2 + " " + "0" + " " + f2 + " " + comment + "\n"
+                    else:
                         line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + fc1 + " " + f1 + " " + a2 + " " + "0" + " " + f2 + " " + comment + "\n"
             out_file.write(line)
     return
