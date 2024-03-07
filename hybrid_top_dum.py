@@ -13,7 +13,8 @@ def process_other(line, in_f, out_file):
             out_file.write(line + "\n")
     return
 
-def process_angles(line, in_f, out_file):
+def process_angles(line, in_f, out_file, endstate='B', fc='20.92', bridge_atoms = ["C2", "C4"], P2s = ['C5', 'H8', 'H9']):
+    """lower force constant of angle dummy bridge atom, physical bridge atom and second physical shell"""
     out_file.write(line + "\n")
     while True:
         line = in_f.readline()
@@ -24,15 +25,19 @@ def process_angles(line, in_f, out_file):
         else:
             ai, aj, ak, funct, c1, k1, c2, k2 = line.strip().split()[:8]
             comment = " ".join(line.split()[8:])
-            if "C2" in comment and "C4" in comment:
-                if any(ext in comment for ext in ['C5', 'H8', 'H9']):
-                    line = ai.rjust(6) + aj.rjust(7) + ak.rjust(6) + funct.rjust(8) + c1.rjust(15) + "14.85".rjust(10) + c2.rjust(20) + "14.85".rjust(10) + comment + "\n"
+            if bridge_atoms[0] in comment and bridge_atoms[0] in comment:
+                if any(ext in comment for ext in P2s):
+                    if endstate == 'A':
+                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(6) + funct.rjust(8) + c1.rjust(15) + fc.rjust(10) + c2.rjust(20) + k2.rjust(15) + comment + "\n"
+                    elif endstate == 'B':
+                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(6) + funct.rjust(8) + c1.rjust(15) + k1.rjust(15) + c2.rjust(15) + fc.rjust(10) + comment + "\n"
             out_file.write(line)
         
     out_file.write("\n\n")
     return
 
-def process_dhedrals(line, in_f, out_file):
+def process_dhedrals(line, in_f, out_file, endstate = 'B', P2s = ['H8']):
+    "remove dihedral angles P3P2P1D1, only keep selected dihedrals of P2P1D1D2"
     out_file.write(line + "\n")
     i = 0
     while True:
@@ -45,10 +50,16 @@ def process_dhedrals(line, in_f, out_file):
         else:
             ai, aj, ak, al, funct, a1, fc1, f1, a2, fc2, f2 = line.strip().split()[0:11]
             comment = " ".join(line.split()[11:])
-            second = line.split()[-1].split('->')[1]
-            if second.count("A") > 1 and "D" in second:
-                if 'H8' not in comment:
-                    line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + "0" + " " + f1 + " " + a2 + " " + "0" + " " + f2 + " " + comment + "\n"
+            if endstate == "A":
+                first = line.split()[-1].split('->')[0]
+                if first.count("A") > 1 and "D" in first:
+                    if not any(ext in comment for ext in P2s):
+                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + "0" + " " + f1 + " " + a2 + " " + fc2 + " " + f2 + " " + comment + "\n"
+            elif endstate == 'B':
+                second = line.split()[-1].split('->')[1]
+                if second.count("A") > 1 and "D" in second:
+                    if not any(ext in comment for ext in P2s):
+                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + fc1 + " " + f1 + " " + a2 + " " + "0" + " " + f2 + " " + comment + "\n"
             out_file.write(line)
     return
 
@@ -91,4 +102,4 @@ def process_file(in_file, out_file):
     out_f.close()
 
 if __name__ == "__main__":
-    process_file()
+    process_file('topol_Hmap.top', 'Int_endstate_dum_fc20_dh8_d3_v2.itp')
