@@ -31,6 +31,7 @@ if __name__ == "__main__":
     # set the path to the molecular dynamics parameter files
     fe.mdpPath = 'decoupling'
     fe.states = list(range(2))
+    fe.thermCycleBranches = ['vacuum']
     # set the number of replicas (several repetitions of calculation are useful to obtain reliable statistics)
     fe.replicas = args.num_replicas
     # provide the path to the protein structure and topology
@@ -68,8 +69,8 @@ if __name__ == "__main__":
         fe.boxWaterIons( )
 
         #prepare simulation
-        fe.prepare_simulation( simType='em' )
-        fe.prepare_jobscripts(simType='em')
+        fe.prepare_simulation( simType='em', bWat=False)
+        fe.prepare_jobscripts(simType='em',  bWat=False)
     else:
-        fe.prepare_simulation( simType=args.output )
-        fe.prepare_jobscripts(simType=args.output)
+        fe.prepare_simulation( simType=args.output,  bWat=False )
+        fe.prepare_jobscripts(simType=args.output,  bWat=False)
