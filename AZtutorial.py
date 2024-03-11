@@ -1,4 +1,5 @@
 import glob
+import json
 import os
 import subprocess
 
@@ -8,7 +9,8 @@ from pmx import gmx, ligand_alchemy
 from pmx.utils import create_folder
 
 import jobscript
-from hybrid_top_ABcharge import process_file
+from hybrid_top_ABcharge import process_file as process_file_ABcharge
+from hybrid_top_dum import process_file as process_file_decouple
 
 
 class AZtutorial:
@@ -315,7 +317,7 @@ class AZtutorial:
         print('DONE')            
             
             
-    def hybrid_structure_topology( self, edges=None, bVerbose=False, bSeparate=False ):
+    def hybrid_structure_topology( self, edges=None, bVerbose=False, bSeparate=False , bDecouple=False):
         print('----------------------------------')
         print('Creating hybrid structure/topology')
         print('----------------------------------')
@@ -360,6 +362,18 @@ class AZtutorial:
                 
             process.wait()    
         
+        if bDecouple:
+            print('----------------------------------')
+            print('Creating hybrid structure/topology')
+            print('----------------------------------')
+
+            for edge in edges:
+                outpath = self._get_specific_path(edge=edge,bHybridStrTop=True)
+                os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_org.itp'.format(outpath))
+                with open(f'{edge[0]}_{edge[1]}.json') as json_file:
+                    params = json.load(json_file)
+                process_file_decouple('{0}/merged_org.itp'.format(outpath), '{0}/merged.itp'.format(outpath), params)
+
         if bSeparate:
             print('----------------------------------')
             print('Creating hybrid structure/topology')
@@ -368,7 +382,7 @@ class AZtutorial:
             for edge in edges:
                 outpath = self._get_specific_path(edge=edge,bHybridStrTop=True)
                 os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_tmp.itp'.format(outpath))
-                process_file('{0}/merged_tmp.itp'.format(outpath), '{0}/merged.itp'.format(outpath))
+                process_file_ABcharge('{0}/merged_tmp.itp'.format(outpath), '{0}/merged.itp'.format(outpath))
 
         print('DONE')
             

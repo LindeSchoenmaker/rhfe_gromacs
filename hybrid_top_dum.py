@@ -147,7 +147,7 @@ if __name__ == "__main__":
               'bridge_atoms': {'A': [["C1", "HV3"], ['C7', 'DN1']],
                                'B': [["C1", "O1"], ['C7', 'N1']]},
               'P2s_angle': [['C2', 'C6'], ['O3', 'C6']]}
-    ##atoms have different names!!
+
     to__ref = {'fc':'20.92',
                'name': 'to__ref',
               'P2s_dihedral':['H8', 'O1', 'C11'],
@@ -155,5 +155,8 @@ if __name__ == "__main__":
                                'B': [["C4", "C2"], ["C10", "H12"], ['C12', 'N3']]},
               'P2s_angle': [['C5', 'H8', 'H9'], ['C9', 'C11'], ['O1', 'C9']]}
     
+    import json
     for params in [to__int, ref_int, to__ref]:
+        with open(f'{params["name"]}.json', "w") as outfile: 
+            json.dump(params, outfile)
         process_file(f'merged_tmp_{params["name"]}.itp', f'merged_tmp_{params["name"]}_decoupled.itp', decouple_params = params)

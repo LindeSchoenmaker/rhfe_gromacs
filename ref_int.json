@@ -1,0 +1,1 @@
+{"fc": "20.92", "name": "ref_int", "P2s_dihedral": ["O3", "C2"], "bridge_atoms": {"A": [["C1", "HV3"], ["C7", "DN1"]], "B": [["C1", "O1"], ["C7", "N1"]]}, "P2s_angle": [["C2", "C6"], ["O3", "C6"]]}
