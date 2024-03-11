@@ -370,7 +370,7 @@ class AZtutorial:
             for edge in edges:
                 outpath = self._get_specific_path(edge=edge,bHybridStrTop=True)
                 os.rename('{0}/merged.itp'.format(outpath), '{0}/merged_org.itp'.format(outpath))
-                with open(f'{edge[0]}_{edge[1]}.json') as json_file:
+                with open(f'{edge[5:]}.json') as json_file:
                     params = json.load(json_file)
                 process_file_decouple('{0}/merged_org.itp'.format(outpath), '{0}/merged.itp'.format(outpath), params)
 
