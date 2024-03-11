@@ -31,7 +31,6 @@ if __name__ == "__main__":
     # set the path to the molecular dynamics parameter files
     fe.mdpPath = 'decoupling'
     fe.states = list(range(2))
-    fe.thermCycleBranches = ['vacuum']
     # set the number of replicas (several repetitions of calculation are useful to obtain reliable statistics)
     fe.replicas = args.num_replicas
     # provide the path to the protein structure and topology
