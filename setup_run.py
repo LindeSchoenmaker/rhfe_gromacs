@@ -7,7 +7,7 @@ from AZtutorial import AZtutorial
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--output", help="which files to produce",
-                type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production'])
+                type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production', None])
 parser.add_argument("-wp", "--workPath", help="the workpath",
                 type=str, default="workpath")
 parser.add_argument("-p", "--JOBpartition", help="which partition to use", default ='free-gpu',
@@ -29,8 +29,8 @@ if __name__ == "__main__":
     # set the workpath
     fe.workPath = args.workPath
     # set the path to the molecular dynamics parameter files
-    fe.mdpPath = 'decoupling'
-    fe.states = list(range(2))
+    fe.mdpPath = 'decoupling/mdp_nofep'
+    fe.states = list(range(1))
     # set the number of replicas (several repetitions of calculation are useful to obtain reliable statistics)
     fe.replicas = args.num_replicas
     # provide the path to the protein structure and topology
@@ -70,6 +70,6 @@ if __name__ == "__main__":
         #prepare simulation
         fe.prepare_simulation( simType='em')
         fe.prepare_jobscripts(simType='em')
-    else:
+    elif args.output in ['em', 'equil_nvt', 'equil_npt', 'production']:
         fe.prepare_simulation( simType=args.output)
         fe.prepare_jobscripts(simType=args.output)
