@@ -7,7 +7,7 @@ from AZtutorial import AZtutorial
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--output", help="which files to produce",
-                type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production', None])
+                type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production', 'prepare_dir'])
 parser.add_argument("-wp", "--workPath", help="the workpath",
                 type=str, default="workpath")
 parser.add_argument("-p", "--JOBpartition", help="which partition to use", default ='free-gpu',
