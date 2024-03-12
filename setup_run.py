@@ -61,15 +61,15 @@ if __name__ == "__main__":
         # bVerbose flag prints the output of the command
         fe.atom_mapping(bVerbose=False)
         #construct hybrid topology
-        fe.hybrid_structure_topology(bVerbose=False, bSeparate=False, bDecouple=True)
+        fe.hybrid_structure_topology(bVerbose=False, bSeparate=False, bDecouple=False)
         #assemble ligand+water systems
         fe.assemble_systems( )
         #build box, solvate
         fe.boxWaterIons( )
 
         #prepare simulation
-        fe.prepare_simulation( simType='em', bWat=False)
-        fe.prepare_jobscripts(simType='em',  bWat=False)
+        fe.prepare_simulation( simType='em')
+        fe.prepare_jobscripts(simType='em')
     else:
-        fe.prepare_simulation( simType=args.output,  bWat=False )
-        fe.prepare_jobscripts(simType=args.output,  bWat=False)
+        fe.prepare_simulation( simType=args.output)
+        fe.prepare_jobscripts(simType=args.output)
