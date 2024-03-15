@@ -1,4 +1,72 @@
 #! /usr/bin/python
+import collections
+from collections import Counter
+from itertools import chain
+
+
+def process_atoms(line, in_f, out_file):
+    dummies = {'A': [], 'B': []}
+    out_file.write(line  + "\n")
+
+    while True:
+        line = in_f.readline()
+        if line.strip() == "":
+            out_file.write("\n")
+            break
+        elif line.split()[0] == ";":
+            out_file.write(line + "\n")
+        else:
+            nr, typ, resnr, res, atom, cgnr, charge, mass, typB, chargeB, massB = line.strip().split()
+            if typ.startswith('DUM_'):
+                dummies['A'].append(nr)
+            if typB.startswith('DUM_'):
+                dummies['B'].append(nr)
+            out_file.write(line)
+
+    return dummies
+
+def process_bonds(line, in_f, out_file, dummies, line_num):
+    bridge = {'A': [], 'B': []}
+    physical = []
+    bonds = collections.defaultdict(list)
+    out_file.write(line + "\n")
+    while True:
+        line = in_f.readline()
+        if line.strip() == "":
+            break
+        elif line.split()[0] == ";":
+            out_file.write(line + "\n")
+        else:
+            ai, aj, funct, c1, k1, c2, k2 = line.strip().split()[:7]
+            if ai in dummies['A'] and aj not in dummies['A']:
+                bridge['A'].append([aj, ai]) #physical, dummy
+                physical.append(aj)
+            elif ai not in dummies['A'] and aj in dummies['A']:
+                bridge['A'].append([ai, aj]) #physical, dummy   
+                physical.append(ai) 
+            elif ai in dummies['B'] and aj not in dummies['B']:
+                bridge['B'].append([aj, ai]) #physical, dummy
+            elif ai not in dummies['B'] and aj in dummies['B']:
+                bridge['B'].append([ai, aj]) #physical, dummy
+            out_file.write(line)
+
+    in_f.seek(line_num)
+    while True:
+        line = in_f.readline()
+        if line.strip() == "":
+            break
+        elif line.split()[0] == ";":
+            continue
+        else:
+            ai, aj, funct, c1, k1, c2, k2 = line.strip().split()[:7]
+            if ai in physical:
+                if aj not in dummies['A'] and aj not in dummies['B']:
+                    bonds[ai].append(aj)
+            elif aj in physical:
+                if ai not in dummies['A'] and ai not in dummies['B']:
+                    bonds[aj].append(ai)
+
+    return bridge, bonds
 
 def process_other(line, in_f, out_file):
     out_file.write(line + "\n")
@@ -36,15 +104,14 @@ def process_angles(line,
         else:
             ai, aj, ak, funct, c1, k1, c2, k2 = line.strip().split()[:8]
             comment = " ".join(line.split()[8:])
-            atoms = comment.split(' ')[1:]
-            atoms = [atom.rstrip('x') for atom in atoms]
+            atoms = [ai, aj, ak]
             for endstate in ['A', 'B']:
                 for i in range(len(bridge_atoms[endstate])):
                     if bridge_atoms[endstate][i][0] in atoms and bridge_atoms[
                             endstate][i][1] in atoms:
-                        if any(ext in atoms for ext in P2s[i]):
+                        if any(ext in atoms for ext in P2s[bridge_atoms[endstate][i][0]]):
                             # for triple junction set force constant of angle low
-                            if len(P2s[i]) == 3:
+                            if len(P2s[bridge_atoms[endstate][i][0]]) == 3:
                                 if endstate == 'A':
                                     line = ai.rjust(6) + aj.rjust(
                                         7) + ak.rjust(6) + funct.rjust(
@@ -58,7 +125,7 @@ def process_angles(line,
                                                 15) + c2.rjust(15) + fc.rjust(
                                                     10) + comment + "\n"
                             # for dual junction use high force constant and angle of 90 degrees
-                            elif len(P2s[i]) == 2:
+                            elif len(P2s[bridge_atoms[endstate][i][0]]) == 2:
                                 if endstate == 'A':
                                     line = ai.rjust(6) + aj.rjust(7) + ak.rjust(
                                         6) + funct.rjust(8) + dual_angle.rjust(
@@ -94,7 +161,7 @@ def process_dhedrals(line, in_f, out_file, P2s=['H8']):
             ai, aj, ak, al, funct, a1, fc1, f1, a2, fc2, f2 = line.strip(
             ).split()[0:11]
             comment = " ".join(line.split()[11:])
-            atoms = comment.split(' ')[1:5]
+            atoms = [ai, aj, ak, al]
             first = line.split()[-1].split('->')[0]
             if first.count("A") > 1 and "D" in first:
                 if any(ext in atoms for ext in P2s):
@@ -141,18 +208,18 @@ def process_dhedrals(line, in_f, out_file, P2s=['H8']):
 def process_file(in_file, out_file, decouple_params):
     with open(out_file, 'w') as out_f:
         with open(in_file) as in_f:
-            for line in in_f:
+            for line in iter(in_f.readline, ''):
                 if line.strip() == "[ moleculetype ]":
                     print("moleculetype section started!")
                     process_other(line.strip(), in_f, out_f)
                     print("moleculetype section done!")
                 elif line.strip() == "[ atoms ]":
                     print("atoms section started!")
-                    process_other(line.strip(), in_f, out_f)
+                    dummies = process_atoms(line.strip(), in_f, out_f)
                     print("atoms section done!")
                 elif line.strip() == "[ bonds ]":
                     print("bonds sectrion started!")
-                    process_other(line.strip(), in_f, out_f)
+                    bridge, bonds = process_bonds(line.strip(), in_f, out_f, dummies, in_f.tell())
                     print("bonds sectrion done!")
                 elif line.strip() == "[ pairs ]":
                     print("pairs section started!")
@@ -160,11 +227,18 @@ def process_file(in_file, out_file, decouple_params):
                     print("pairs section done!")
                 elif line.strip() == "[ angles ]":
                     print("angles section started!")
-                    process_angles(line.strip(), in_f, out_f, fc=decouple_params['fc'], bridge_atoms = decouple_params['bridge_atoms'], P2s = decouple_params['P2s_angle'])
+                    process_angles(line.strip(), in_f, out_f, fc=decouple_params['fc'], bridge_atoms = bridge, P2s = bonds)
                     print("angles section done!")
                 elif line.strip() == "[ dihedrals ]":
                     print("dihedrals section started!")
-                    process_dhedrals(line.strip(), in_f, out_f, P2s = decouple_params['P2s_dihedral'])
+                    bonds_list = [bonds[key] for key in bonds]
+                    freq = Counter(chain.from_iterable(bonds_list))
+                    res = {idx for idx in freq if freq[idx] == 1}
+                    bonds_list = [[x for x in bond_list if x in res] for bond_list in bonds_list]
+                    print(bonds_list)
+                    dihedral_excpt = [suitable[0] for suitable in bonds_list]
+                    print(dihedral_excpt)
+                    process_dhedrals(line.strip(), in_f, out_f, P2s = dihedral_excpt)
                     print("dihedrals section done!")
                 elif line.strip() == "[ cmap ]":
                     print("cmap section started!")
