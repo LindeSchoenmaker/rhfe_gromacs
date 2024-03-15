@@ -93,3 +93,4 @@ sc-power                 = 1
 sc-sigma		         = 0.3
 vdw-lambdas              = VVV
 coul-lambdas             = WWW
+bonded-lambdas           = VVV

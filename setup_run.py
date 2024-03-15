@@ -30,8 +30,8 @@ if __name__ == "__main__":
     # set the workpath
     fe.workPath = args.workPath
     # set the path to the molecular dynamics parameter files
-    fe.mdpPath = 'decoupling/mdp_nofep'
-    fe.states = list(range(1))
+    fe.mdpPath = 'input/mdppath'
+    fe.states = list(range(20))
     # set the number of replicas (several repetitions of calculation are useful to obtain reliable statistics)
     fe.replicas = args.num_replicas
     # provide the path to the protein structure and topology
