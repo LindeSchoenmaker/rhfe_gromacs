@@ -18,6 +18,7 @@ parser.add_argument("-l", "--ligands", help="provide ligands for which to enumer
                 nargs='+', type=str)
 parser.add_argument("-n", "--num_replicas", help="Number of replicas", default = 1,
                 type=int)
+parser.add_argument('-d', '--decouple', help="decouple bonded interactions, requires json file with atom names", action='store_true')
 
 if __name__ == "__main__":
     print(pmx.__version__)
@@ -61,7 +62,7 @@ if __name__ == "__main__":
         # bVerbose flag prints the output of the command
         fe.atom_mapping(bVerbose=False)
         #construct hybrid topology
-        fe.hybrid_structure_topology(bVerbose=False, bSeparate=False, bDecouple=False)
+        fe.hybrid_structure_topology(bVerbose=False, bSeparate=True, bDecouple=args.decouple)
         #assemble ligand+water systems
         fe.assemble_systems( )
         #build box, solvate
