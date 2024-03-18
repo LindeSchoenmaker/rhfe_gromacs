@@ -6,19 +6,58 @@ import pmx
 from AZtutorial import AZtutorial
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-o", "--output", help="which files to produce",
-                type=str, choices=['initial', 'em', 'equil_nvt', 'equil_npt', 'production', 'prepare_dir'])
-parser.add_argument("-wp", "--workPath", help="the workpath",
-                type=str, default="workpath")
-parser.add_argument("-p", "--JOBpartition", help="which partition to use", default ='free-gpu',
-                type=str, choices=['free', 'free-gpu', 'standard', 'gpu'])
-parser.add_argument("-t", "--JOBsimtime", help="simulation time in hours", default =3,
-                type=int)
-parser.add_argument("-l", "--ligands", help="provide ligands for which to enumerate edges, at least 2", default = ['to_', 'ref'],
-                nargs='+', type=str)
-parser.add_argument("-n", "--num_replicas", help="Number of replicas", default = 1,
-                type=int)
-parser.add_argument('-d', '--decouple', help="decouple bonded interactions, requires json file with atom names", action='store_true')
+parser.add_argument("-o",
+                    "--output",
+                    help="which files to produce",
+                    type=str,
+                    choices=[
+                        'initial', 'em', 'equil_nvt', 'equil_npt',
+                        'production', 'prepare_dir'
+                    ])
+parser.add_argument("-wp",
+                    "--workPath",
+                    help="directory to save output files in",
+                    type=str,
+                    default="workpath")
+parser.add_argument("-mdpp",
+                    "--mdpPath",
+                    help="path to mdp files",
+                    type=str,
+                    default="input/mdppath/files/")
+parser.add_argument("-ns",
+                    "--num_states",
+                    help="Number of states",
+                    default=20,
+                    type=int)
+parser.add_argument("-p",
+                    "--JOBpartition",
+                    help="which partition to use",
+                    default='free-gpu',
+                    type=str,
+                    choices=['free', 'free-gpu', 'standard', 'gpu'])
+parser.add_argument("-t",
+                    "--JOBsimtime",
+                    help="simulation time in hours",
+                    default=3,
+                    type=int)
+parser.add_argument(
+    "-l",
+    "--ligands",
+    help="provide ligands for which to enumerate edges, at least 2",
+    default=['to_', 'ref'],
+    nargs='+',
+    type=str)
+parser.add_argument("-n",
+                    "--num_replicas",
+                    help="Number of replicas",
+                    default=1,
+                    type=int)
+parser.add_argument(
+    '-d',
+    '--decouple',
+    help="decouple bonded interactions, requires json file with atom names",
+    action='store_true')
+
 
 if __name__ == "__main__":
     print(pmx.__version__)
@@ -30,8 +69,8 @@ if __name__ == "__main__":
     # set the workpath
     fe.workPath = args.workPath
     # set the path to the molecular dynamics parameter files
-    fe.mdpPath = 'input/mdppath/files/'
-    fe.states = list(range(20))
+    fe.mdpPath = args.mdpPath
+    fe.states = list(range(args.num_states))
     # set the number of replicas (several repetitions of calculation are useful to obtain reliable statistics)
     fe.replicas = args.num_replicas
     # provide the path to the protein structure and topology
