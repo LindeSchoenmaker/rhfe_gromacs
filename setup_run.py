@@ -53,9 +53,14 @@ parser.add_argument("-n",
                     default=1,
                     type=int)
 parser.add_argument(
+    '-sep',
+    '--separate',
+    help="split from a to b into from a to uncharged b & from uncharged b to b",
+    action='store_true')
+parser.add_argument(
     '-d',
     '--decouple',
-    help="decouple bonded interactions, requires json file with atom names",
+    help="decouple bonded interactions",
     action='store_true')
 
 
@@ -101,7 +106,7 @@ if __name__ == "__main__":
         # bVerbose flag prints the output of the command
         fe.atom_mapping(bVerbose=False)
         #construct hybrid topology
-        fe.hybrid_structure_topology(bVerbose=False, bSeparate=True, bDecouple=args.decouple)
+        fe.hybrid_structure_topology(bVerbose=False, bSeparate=args.separate, bDecouple=args.decouple)
         #assemble ligand+water systems
         fe.assemble_systems( )
         #build box, solvate
