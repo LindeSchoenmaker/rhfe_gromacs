@@ -157,7 +157,6 @@ def process_dhedrals(line, in_f, out_file, P2s=['H8']):
         if line.split()[0] == ";":
             out_file.write(line.strip() + "\n")
         else:
-            altered = False
             ai, aj, ak, al, funct, a1, fc1, f1, a2, fc2, f2 = line.strip(
             ).split()[0:11]
             comment = " ".join(line.split()[11:])
@@ -171,31 +170,23 @@ def process_dhedrals(line, in_f, out_file, P2s=['H8']):
                         ) + al.rjust(7) + funct.rjust(
                             5
                         ) + " " + a1 + " " + "0" + " " + f1 + " " + a2 + " " + fc2 + " " + f2 + " " + comment + "\n"
-                        altered = True
                 else:
                     line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(
                         7
                     ) + funct.rjust(
                         5
                     ) + " " + a1 + " " + "0" + " " + f1 + " " + a2 + " " + fc2 + " " + f2 + " " + comment + "\n"
-                    altered = True
 
             second = line.split()[-1].split('->')[1]
             if second.count("A") > 1 and "D" in second:
-                if any(ext in comment for ext in P2s):
+                if any(ext in atoms for ext in P2s):
                     if second.count("A") != 2:
-                        if altered:
-                            raise AssertionError(
-                                'Dihedral between two dummy atoms is made')
                         line = ai.rjust(6) + aj.rjust(7) + ak.rjust(
                             7
                         ) + al.rjust(7) + funct.rjust(
                             5
                         ) + " " + a1 + " " + fc1 + " " + f1 + " " + a2 + " " + "0" + " " + f2 + " " + comment + "\n"
                 else:
-                    if altered:
-                        raise AssertionError(
-                            'Dihedral between two dummy atoms is made')
                     line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(
                         7
                     ) + funct.rjust(
@@ -272,7 +263,7 @@ if __name__ == "__main__":
               'P2s_angle': [['C5', 'H8', 'H9'], ['C9', 'C11'], ['O1', 'C9']]}
 
     import json
-    for params in [ref_int, to__int, to__ref]:
+    for params in [to__ref]: #[ref_int, to__int, to__ref]:
         with open(f'{params["name"]}.json', "w") as outfile:
             json.dump(params, outfile)
         process_file(f'merged_tmp_{params["name"]}.itp', f'merged_tmp_{params["name"]}_decoupled_new.itp', decouple_params = params)
