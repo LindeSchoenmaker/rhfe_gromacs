@@ -203,7 +203,7 @@ def process_dhedrals(line, in_f, out_file, P2s=['H8'], multiplicity_atoms=None):
             if first.count("A") > 1 and "D" in first:
                 if first.count("D") == 1:
                     if set(atoms) in multiplicity_atom_sets and fc1 != "0": # also apply if exact same atoms also have other dihedral term
-                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + "420" + " " + "1" + " " + a2 + " " + fc2 + " " + f2 + " " + comment + "\n"
+                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + "420" + " " + "1" + " " + a2 + " " + fc2 + " " + "1" + " " + comment + "\n"
                     else:
                         line = ai.rjust(6) + aj.rjust(7) + ak.rjust(
                             7
@@ -228,7 +228,7 @@ def process_dhedrals(line, in_f, out_file, P2s=['H8'], multiplicity_atoms=None):
             if second.count("A") > 1 and "D" in second:
                 if second.count("D") == 1:
                     if set(atoms) in multiplicity_atom_sets and fc2 != "0": # also apply if exact same atoms also have other dihedral term
-                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + fc1 + " " + f1 + " " + a2 + " " + "420" + " " + "1" + " " + comment + "\n"
+                        line = ai.rjust(6) + aj.rjust(7) + ak.rjust(7) + al.rjust(7) + funct.rjust(5) + " " + a1 + " " + fc1 + " " + "1" + " " + a2 + " " + "420" + " " + "1" + " " + comment + "\n"
                     else:
                         line = ai.rjust(6) + aj.rjust(7) + ak.rjust(
                             7
