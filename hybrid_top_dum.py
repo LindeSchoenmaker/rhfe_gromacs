@@ -14,7 +14,7 @@ def process_atoms(line, in_f, out_file):
             out_file.write("\n")
             break
         elif line.split()[0] == ";":
-            out_file.write(line + "\n")
+            out_file.write(line)
         else:
             nr, typ, resnr, res, atom, cgnr, charge, mass, typB, chargeB, massB = line.strip().split()
             if typ.startswith('DUM_'):
@@ -37,7 +37,7 @@ def process_bonds(line, in_f, out_file, dummies, line_num):
         if line.strip() == "":
             break
         elif line.split()[0] == ";":
-            out_file.write(line + "\n")
+            out_file.write(line)
         else:
             ai, aj, funct, c1, k1, c2, k2 = line.strip().split()[:7]
             if ai in dummies['A'] and aj not in dummies['A']:
