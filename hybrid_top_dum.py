@@ -51,6 +51,7 @@ def process_bonds(line, in_f, out_file, dummies, line_num):
             elif ai not in dummies['B'] and aj in dummies['B']:
                 bridge['B'].append([ai, aj])  #physical, dummy
             out_file.write(line)
+    out_file.write("\n")
 
     in_f.seek(line_num)
     while True:
@@ -177,7 +178,7 @@ def process_angles(line,
                                                             16) + comment + "\n"
             out_file.write(line)
 
-    out_file.write("\n\n")
+    out_file.write("\n")
     return
 
 
