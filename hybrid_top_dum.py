@@ -255,7 +255,7 @@ def process_dhedrals(line, in_f, out_file, P2s=['H8'], multiplicity_atoms=None):
     return
 
 
-def process_file(in_file, out_file, decouple_params):
+def process_file(in_file, out_file, set_to_90=True, angle_forceconstant='20.92'):
     with open(out_file, 'w') as out_f:
         with open(in_file) as in_f:
             for line in iter(in_f.readline, ''):
@@ -286,13 +286,14 @@ def process_file(in_file, out_file, decouple_params):
                                   for bond_list in bonds_list]
 
                     multiplicity_atoms = None
-                    if not decouple_params['90']:
+                    if not set_to_90:
                         # for dual anchored save dihedrals
                         multiplicity_atoms = []
                         dual_idx = [len(x) == 2 for x in P2s.values()]
                         P1s_dual = list(compress(list(P2s.keys()), dual_idx))
                         for loc in bridge['A']:
-                            if loc[0] not in P1s_dual: continue
+                            if loc[0] not in P1s_dual: 
+                                continue
                             P3 = None
                             D1_A = loc[1]
                             P1 = loc[0]
@@ -333,7 +334,7 @@ def process_file(in_file, out_file, decouple_params):
                     process_angles(line.strip(),
                                    in_f,
                                    out_f,
-                                   fc=decouple_params['fc'],
+                                   fc=angle_forceconstant,
                                    bridge_atoms=bridge,
                                    P2s=P2s,
                                    multiplicity_atoms=multiplicity_atoms)
@@ -385,4 +386,4 @@ if __name__ == "__main__":
     for params in [ref_int, to__int, to__ref]: #[ref_int, to__int, to__ref]:
         with open(f'{params["name"]}.json', "w") as outfile:
             json.dump(params, outfile)
-        process_file(f'merged_tmp_{params["name"]}.itp', f'merged_tmp_{params["name"]}_decoupled_new_90.itp', decouple_params = params)
+        process_file(f'merged_tmp_{params["name"]}.itp', f'merged_tmp_{params["name"]}_decoupled_new_90.itp')
