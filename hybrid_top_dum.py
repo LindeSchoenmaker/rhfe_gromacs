@@ -175,7 +175,8 @@ def process_angles(line,
                                                 8) + c1.rjust(15) + k1.rjust(
                                                     15) + dual_angle.rjust(
                                                         9) + dual_fc.rjust(
-                                                            16) + comment + "\n"
+                                                            16) + comment.rjust(
+                                                            19) + "\n"
             out_file.write(line)
 
     out_file.write("\n")
@@ -356,7 +357,7 @@ def process_file(in_file, out_file, decouple_params):
 
 if __name__ == "__main__":
     to__int = {'fc':'20.92',
-               '90': False,
+               '90': True,
                'name': 'to__int',
               'P2s_dihedral':['H8'],
               'bridge_atoms': {'A': [["C4", "DC10"]],
@@ -364,7 +365,7 @@ if __name__ == "__main__":
               'P2s_angle': [['C5', 'H8', 'H9']]}
 
     ref_int = {'fc':'20.92',
-               '90': False,
+               '90': True,
                'name': 'ref_int',
               'P2s_dihedral':['O3', 'C2'],
               'bridge_atoms': {'A': [["C1", "HV3"], ['C7', 'DN1']],
@@ -372,7 +373,7 @@ if __name__ == "__main__":
               'P2s_angle': [['C2', 'C6'], ['O3', 'C6']]}
 
     to__ref = {'fc':'20.92',
-               '90': False,
+               '90': True,
                'name': 'to__ref',
               'P2s_dihedral':['H8', 'O1', 'C11'],
               'bridge_atoms': {'A': [["C4", "DC14"], ["C10", "DO1"], ['C12', 'DN1']],
