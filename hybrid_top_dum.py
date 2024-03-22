@@ -168,7 +168,8 @@ def process_angles(line,
                                             6) + funct.rjust(8) + dual_angle.rjust(
                                                 9) + dual_fc.rjust(16) + c2.rjust(
                                                     20) + k2.rjust(
-                                                        15) + comment + "\n"
+                                                        15) + comment.rjust(
+                                                            12) + "\n"
                                     elif endstate == 'B':
                                         line = ai.rjust(6) + aj.rjust(
                                             7) + ak.rjust(6) + funct.rjust(
