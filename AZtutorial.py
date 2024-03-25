@@ -608,7 +608,7 @@ class AZtutorial:
             ligTopPath = self._get_specific_path(edge=edge,wp='water')
             vacTopPath = self._get_specific_path(edge=edge,wp='vacuum')            
             
-            for state in range(len(self.states)):
+            for state in self.states:
                 for r in range(1,self.replicas+1):
                     
                     # ligand in water
@@ -669,7 +669,7 @@ class AZtutorial:
             edges = self.edges
         for edge in edges:
             
-            for state in range(len(self.states)):
+            for state in self.states:
                 for r in range(1,self.replicas+1):            
                     
                     # ligand in water
@@ -713,7 +713,7 @@ class AZtutorial:
         counter = 0
         for edge in edges:
             
-            for state in range(len(self.states)):
+            for state in self.states:
                 for r in range(1,self.replicas+1):            
                     
                     # ligand in water
