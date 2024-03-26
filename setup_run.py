@@ -44,9 +44,15 @@ parser.add_argument(
     "-l",
     "--ligands",
     help="provide ligands for which to enumerate edges, at least 2",
-    default=['to_', 'ref'],
+    default=None,
     nargs='+',
     type=str)
+parser.add_argument(
+    "-e",
+    "--edges",
+    help="provide edge combinations, separated by underscore, i.e. -e P2A_P2B P2A_P2I",
+    default=None,
+    nargs='+')
 parser.add_argument("-n",
                     "--num_replicas",
                     help="Number of replicas",
@@ -83,10 +89,14 @@ if __name__ == "__main__":
     # provide the path to the folder with ligand structures and topologies
     fe.ligandPath = 'input/ligands'
     # provide edges
-    if len(args.ligands) == 1:
-        print('need at least two ligands')
-    edges = [list(x) for x in itertools.combinations(args.ligands, 2)]
-    fe.edges = edges #, ['to_', 'int'], ['int','ref'], ['to_', 'ref'] ]
+    if args.ligands:
+        if len(args.ligands) == 1:
+            print('need at least two ligands')
+        edges = [list(x) for x in itertools.combinations(args.ligands, 2)]
+        fe.edges = edges #, ['to_', 'int'], ['int','ref'], ['to_', 'ref'] ]
+    elif args.edges:
+        edges = [list(edge.split("_"))  for edge in args.edges]
+        fe.edges = edges
     # finally, let's prepare the overall free energy calculation directory structure
     fe.prepareFreeEnergyDir( )
 
