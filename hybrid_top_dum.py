@@ -102,7 +102,7 @@ def process_bonds(line, in_f, out_file, dummies, line_num):
             elif ai not in dummies['A'] and aj in dummies['A']:
                 bridge['A'].append([ai, aj])  #physical, dummy
                 physical.append(ai)
-            elif ai in dummies['B'] and aj not in dummies['B']:
+            if ai in dummies['B'] and aj not in dummies['B']:
                 bridge['B'].append([aj, ai])  #physical, dummy
             elif ai not in dummies['B'] and aj in dummies['B']:
                 bridge['B'].append([ai, aj])  #physical, dummy
@@ -122,7 +122,7 @@ def process_bonds(line, in_f, out_file, dummies, line_num):
             if ai in physical:
                 if aj not in dummies['A'] and aj not in dummies['B']:
                     P2s[ai].append(aj)
-            elif aj in physical:
+            if aj in physical:
                 if ai not in dummies['A'] and ai not in dummies['B']:
                     P2s[aj].append(ai)
 
@@ -139,7 +139,7 @@ def process_bonds(line, in_f, out_file, dummies, line_num):
             ai, aj, funct, c1, k1, c2, k2 = line.strip().split()[:7]
             if aj in P2s_all and ai not in P2s.keys(): # if attached to P2s but not a P1 atom
                 P3s[aj].append(ai)
-            elif ai in P2s_all and aj not in P2s.keys(): # if attached to P2s but not a P1 atom
+            if ai in P2s_all and aj not in P2s.keys(): # if attached to P2s but not a P1 atom
                 P3s[ai].append(aj)
 
     return bridge, P2s, P3s
