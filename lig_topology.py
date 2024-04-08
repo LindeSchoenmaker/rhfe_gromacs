@@ -76,12 +76,7 @@ if __name__ == "__main__":
                 content = f.read()
                 atomtypes = re.search(r'(\[ atomtypes \])((.|\n)*)',
                                     content).group().split('[ moleculetype ]')[0]
-                content_new = content.replace(
-                    f"""[ moleculetype ]
-    ; Name            nrexcl
-    {ligand.name}          3""", """[ moleculetype ]
-    ; Name            nrexcl
-    MOL          3""")
+                content_new = content.replace(f"{ligand.name}          3", "MOL          3")
                 content_new = content_new.replace('1               2               no              1            0.83333333  ', '1               2               yes             0.5          0.83333333  ')
                 f.seek(0)
                 f.write(content_new)
