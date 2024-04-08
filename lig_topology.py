@@ -34,54 +34,57 @@ def unique_atom_types(pmd_structure, name):
 
 
 if __name__ == "__main__":
-    ligands = Molecule.from_file('input/ligands/comb.sdf')
+    sets = range(1,8)
 
-    # Load a forcefield
-    lig_ff = ForceField('openff_unconstrained-2.0.0.offxml')
+    for lig_set in sets:
+        ligands = Molecule.from_file(f'input/ligands/aligned_{lig_set}.sdf')
 
-    for ligand in ligands:
-        ligand.name = ligand.name[:3]
-        ligand_topology = ligand.to_topology()
+        # Load a forcefield
+        lig_ff = ForceField('openff_unconstrained-2.1.1.offxml')
 
-        ligand_positions = ligand.conformers[0]
-        ligand_topology = ligand.to_topology()
-        ligand_system = lig_ff.create_openmm_system(ligand_topology)
+        for ligand in ligands:
+            ligand.name = ligand.name[:3]
+            ligand_topology = ligand.to_topology()
 
-        pmd_ligand_struct = pmd.openmm.load_topology(
-            ligand_topology.to_openmm(), ligand_system, ligand_positions)
+            ligand_positions = ligand.conformers[0]
+            ligand_topology = ligand.to_topology()
+            ligand_system = lig_ff.create_openmm_system(ligand_topology)
 
-        new_ligand_struct = unique_atom_types(pmd_ligand_struct, ligand.name)
+            pmd_ligand_struct = pmd.openmm.load_topology(
+                ligand_topology.to_openmm(), ligand_system, ligand_positions)
 
-        if not os.path.exists(f'input/ligands/lig_{ligand.name}'):
-            os.mkdir(f'input/ligands/lig_{ligand.name}')
+            new_ligand_struct = unique_atom_types(pmd_ligand_struct, ligand.name)
 
-        new_ligand_struct.save(f'input/ligands/lig_{ligand.name}/mol.top', overwrite=True)
-        new_ligand_struct.save(f'input/ligands/lig_{ligand.name}/mol_gmx.pdb',
-                               overwrite=True)
+            if not os.path.exists(f'input/ligands/lig_{ligand.name}'):
+                os.mkdir(f'input/ligands/lig_{ligand.name}')
 
-        with open(f'input/ligands/lig_{ligand.name}/mol_gmx.pdb', 'r+') as f:
-            content = f.read()
-            content_new = re.sub('([A-Z]{1})(\d{1}|\d{2})(x)',
-                                 r'\1\2 ',
-                                 content,
-                                 flags=re.M)
-            # content_new = re.sub('HETATM', 'ATOM  ', content_new, flags = re.M)
-            f.seek(0)
-            f.write(content_new)
+            new_ligand_struct.save(f'input/ligands/lig_{ligand.name}/mol.top', overwrite=True)
+            new_ligand_struct.save(f'input/ligands/lig_{ligand.name}/mol_gmx.pdb',
+                                overwrite=True)
 
-        with open(f'input/ligands/lig_{ligand.name}/mol.top', 'r+') as f:
-            content = f.read()
-            atomtypes = re.search(r'(\[ atomtypes \])((.|\n)*)',
-                                  content).group().split('[ moleculetype ]')[0]
-            content_new = content.replace(
-                f"""[ moleculetype ]
-; Name            nrexcl
-{ligand.name}          3""", """[ moleculetype ]
-; Name            nrexcl
-MOL          3""")
-            content_new = content_new.replace('1               2               no              1            0.83333333  ', '1               2               yes             0.5          0.83333333  ')
-            f.seek(0)
-            f.write(content_new)
+            with open(f'input/ligands/lig_{ligand.name}/mol_gmx.pdb', 'r+') as f:
+                content = f.read()
+                content_new = re.sub('([A-Z]{1})(\d{1}|\d{2})(x)',
+                                    r'\1\2 ',
+                                    content,
+                                    flags=re.M)
+                # content_new = re.sub('HETATM', 'ATOM  ', content_new, flags = re.M)
+                f.seek(0)
+                f.write(content_new)
 
-        with open(f'input/ligands/lig_{ligand.name}/ffMOL.itp', 'w') as f:
-            f.write(atomtypes)
+            with open(f'input/ligands/lig_{ligand.name}/mol.top', 'r+') as f:
+                content = f.read()
+                atomtypes = re.search(r'(\[ atomtypes \])((.|\n)*)',
+                                    content).group().split('[ moleculetype ]')[0]
+                content_new = content.replace(
+                    f"""[ moleculetype ]
+    ; Name            nrexcl
+    {ligand.name}          3""", """[ moleculetype ]
+    ; Name            nrexcl
+    MOL          3""")
+                content_new = content_new.replace('1               2               no              1            0.83333333  ', '1               2               yes             0.5          0.83333333  ')
+                f.seek(0)
+                f.write(content_new)
+
+            with open(f'input/ligands/lig_{ligand.name}/ffMOL.itp', 'w') as f:
+                f.write(atomtypes)
