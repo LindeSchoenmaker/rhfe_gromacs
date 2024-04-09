@@ -720,6 +720,7 @@ class AZtutorial:
                     if bWat==True:
                         wp = 'water'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
+                        if os.path.isfile(f'{simpath}/confout.gro'): continue
                         jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
                         jobname = 'lig_{0}_{1}_{2}_{3}'.format(edge,state,r,simType)
                         job = jobscript.Jobscript(fname=jobfile,
@@ -738,6 +739,7 @@ class AZtutorial:
                     if bVac==True and simType != 'equil_npt':
                         wp = 'vacuum'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
+                        if os.path.isfile(f'{simpath}/confout.gro'): continue
                         jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
                         jobname = 'vac_{0}_{1}_{2}_{3}'.format(edge,state,r,simType)
                         job = jobscript.Jobscript(fname=jobfile,
