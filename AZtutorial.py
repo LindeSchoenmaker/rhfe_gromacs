@@ -615,6 +615,7 @@ class AZtutorial:
                     if bWat==True:
                         wp = 'water'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
+                        if os.path.isfile(f'{simpath}/confout.gro'): continue
                         prevpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r)
                         toppath = ligTopPath
                         self._prepare_single_tpr( simpath, toppath, state, simType, prevpath )
@@ -623,6 +624,7 @@ class AZtutorial:
                     if bVac==True and simType != 'equil_npt':
                         wp = 'vacuum'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
+                        if os.path.isfile(f'{simpath}/confout.gro'): continue
                         prevpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r)
                         toppath = vacTopPath
                         self._prepare_single_tpr( simpath, toppath, state, simType, prevpath )    
