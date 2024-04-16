@@ -615,16 +615,16 @@ class AZtutorial:
                     if bWat==True:
                         wp = 'water'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
-                        if os.path.isfile(f'{simpath}/confout.gro'): continue
-                        prevpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r)
-                        toppath = ligTopPath
-                        self._prepare_single_tpr( simpath, toppath, state, simType, prevpath )
+                        if not os.path.isfile(f'{simpath}/tpr.tpr'): 
+                            prevpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r)
+                            toppath = ligTopPath
+                            self._prepare_single_tpr( simpath, toppath, state, simType, prevpath )
                     
                     # ligand in vacuum
                     if bVac==True and simType != 'equil_npt':
                         wp = 'vacuum'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
-                        if os.path.isfile(f'{simpath}/confout.gro'): continue
+                        if os.path.isfile(f'{simpath}/tpr.tpr'): continue
                         prevpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r)
                         toppath = vacTopPath
                         self._prepare_single_tpr( simpath, toppath, state, simType, prevpath )    
@@ -722,20 +722,20 @@ class AZtutorial:
                     if bWat==True:
                         wp = 'water'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
-                        if os.path.isfile(f'{simpath}/confout.gro'): continue
-                        jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
-                        jobname = 'lig_{0}_{1}_{2}_{3}'.format(edge,state,r,simType)
-                        job = jobscript.Jobscript(fname=jobfile,
+                        if not os.path.isfile(f'{simpath}/confout.gro'):
+                            jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
+                            jobname = 'lig_{0}_{1}_{2}_{3}'.format(edge,state,r,simType)
+                            job = jobscript.Jobscript(fname=jobfile,
                                         queue=self.JOBqueue,simcpu=self.JOBsimcpu,simtime=self.JOBsimtime,
                                         jobname=jobname,modules=self.JOBmodules,source=self.JOBsource,
                                         gmx=self.JOBgmx, partition=self.JOBpartition,export=self.JOBexport)
-                        cmd1 = 'cd {0}'.format(simpath)
-                        cmd2 = '$GMXRUN -s tpr.tpr'
-                        job.cmds = [cmd1,cmd2]                        
-                        if simType=='transition':
-                            self._commands_for_transitions( simpath, job )
-                        job.create_jobscript()
-                        counter+=1
+                            cmd1 = 'cd {0}'.format(simpath)
+                            cmd2 = '$GMXRUN -s tpr.tpr'
+                            job.cmds = [cmd1,cmd2]                        
+                            if simType=='transition':
+                                self._commands_for_transitions( simpath, job )
+                            job.create_jobscript()
+                            counter+=1
                     
                     # ligand in vac
                     if bVac==True and simType != 'equil_npt':
