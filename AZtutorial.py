@@ -748,6 +748,7 @@ class AZtutorial:
                     if bVac==True and simType != 'equil_npt':
                         wp = 'vacuum'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
+                        create_jobscript = False
                         if not os.path.isfile(f'{simpath}/confout.gro'):
                             create_jobscript = True
                         elif simType == "production" and os.stat(f'{simpath}/dhdl.xvg').st_size == 0:
