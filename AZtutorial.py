@@ -722,7 +722,13 @@ class AZtutorial:
                     if bWat==True:
                         wp = 'water'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
+                        create_jobscript = False
                         if not os.path.isfile(f'{simpath}/confout.gro'):
+                            create_jobscript = True
+                        elif simType == "production" and os.stat(f'{simpath}/dhdl.xvg').st_size == 0:
+                            create_jobscript = True
+
+                        if create_jobscript:
                             jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
                             jobname = 'lig_{0}_{1}_{2}_{3}'.format(edge,state,r,simType)
                             job = jobscript.Jobscript(fname=jobfile,
@@ -735,26 +741,32 @@ class AZtutorial:
                             if simType=='transition':
                                 self._commands_for_transitions( simpath, job )
                             job.create_jobscript()
-                            counter+=1
+                            counter+=1    
+                            
                     
                     # ligand in vac
                     if bVac==True and simType != 'equil_npt':
                         wp = 'vacuum'
                         simpath = self._get_specific_path(edge=edge,wp=wp,state=state,r=r,sim=simType)
-                        if os.path.isfile(f'{simpath}/confout.gro'): continue
-                        jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
-                        jobname = 'vac_{0}_{1}_{2}_{3}'.format(edge,state,r,simType)
-                        job = jobscript.Jobscript(fname=jobfile,
-                                        queue=self.JOBqueue,simcpu=self.JOBsimcpu,simtime=self.JOBsimtime,
-                                        jobname=jobname,modules=self.JOBmodules,source=self.JOBsource,
-                                        gmx=self.JOBgmx, partition=self.JOBpartition,export=self.JOBexport)
-                        cmd1 = 'cd {0}'.format(simpath)
-                        cmd2 = '$GMXRUN -s tpr.tpr'
-                        job.cmds = [cmd1,cmd2]
-                        if simType=='transition':
-                            self._commands_for_transitions( simpath, job )                        
-                        job.create_jobscript()
-                        counter+=1
+                        if not os.path.isfile(f'{simpath}/confout.gro'):
+                            create_jobscript = True
+                        elif simType == "production" and os.stat(f'{simpath}/dhdl.xvg').st_size == 0:
+                            create_jobscript = True
+
+                        if create_jobscript:
+                            jobfile = '{0}/jobscript{1}'.format(jobfolder,counter)
+                            jobname = 'vac_{0}_{1}_{2}_{3}'.format(edge,state,r,simType)
+                            job = jobscript.Jobscript(fname=jobfile,
+                                            queue=self.JOBqueue,simcpu=self.JOBsimcpu,simtime=self.JOBsimtime,
+                                            jobname=jobname,modules=self.JOBmodules,source=self.JOBsource,
+                                            gmx=self.JOBgmx, partition=self.JOBpartition,export=self.JOBexport)
+                            cmd1 = 'cd {0}'.format(simpath)
+                            cmd2 = '$GMXRUN -s tpr.tpr'
+                            job.cmds = [cmd1,cmd2]
+                            if simType=='transition':
+                                self._commands_for_transitions( simpath, job )                        
+                            job.create_jobscript()
+                            counter+=1
                         
         #######
         self._submission_script( jobfolder, counter, simType )
